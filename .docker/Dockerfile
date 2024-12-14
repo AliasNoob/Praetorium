@@ -35,4 +35,8 @@ EXPOSE 5005
 ENV NODE_ENV=production
 ENV PASSWORD=flame_password
 
-CMD ["sh", "-c", "chown -R node /app/data && node server.js"]
+# Update permissions and set default user to "node" (provided in base image as user with UID 1000) to be able to run rootless
+RUN chown -R node:node /app
+USER node
+
+CMD ["sh", "-c", "node server.js"]
