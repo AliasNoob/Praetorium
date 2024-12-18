@@ -2,6 +2,8 @@ name: Docker Image CI (multiarch)
 on:
   push:
     branches: [ master ]
+  pull_request:
+    branches: [ master ]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -43,6 +45,9 @@ jobs:
         with:
           context: .
           file: ./.docker/Dockerfile
-          platforms: linux/amd64,linux/arm/v7,linux/arm64
+          
+          platforms: linux/amd64,linux/arm64
+          # https://github.com/nodejs/docker-node/issues/1798
+          # platforms: linux/amd64,linux/arm/v7,linux/arm64
           push: true
           tags: ${{ steps.prep-multiarch.outputs.tags-multiarch }}
