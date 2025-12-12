@@ -8,6 +8,7 @@ import { Container, Headline } from '../UI';
 import { AppDetails } from './AppDetails/AppDetails';
 import { DockerSettings } from './DockerSettings/DockerSettings';
 import { GeneralSettings } from './GeneralSettings/GeneralSettings';
+import { LayoutSettings } from './LayoutSettings/LayoutSettings';
 import clientRoutes from './settings.json';
 import classes from './Settings.module.css';
 import { StyleSettings } from './StyleSettings/StyleSettings';
@@ -69,6 +70,9 @@ export const Settings = (): JSX.Element => {
             </Route>
             <Route path="css" element={<ProtectedRoute/>}>
               <Route path="" element={<StyleSettings/>}/>
+            </Route>
+            <Route path="layout" element={<ProtectedRoute/>}>
+              <Route path="" element={<LayoutSettings/>}/>
             </Route>
             <Route path="app" element={<AppDetails/>} />
           </Routes>

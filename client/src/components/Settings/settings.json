@@ -31,6 +31,11 @@
       "authRequired": true
     },
     {
+      "name": "Layout",
+      "dest": "/settings/layout",
+      "authRequired": true
+    },
+    {
       "name": "App",
       "dest": "/settings/app",
       "authRequired": false
