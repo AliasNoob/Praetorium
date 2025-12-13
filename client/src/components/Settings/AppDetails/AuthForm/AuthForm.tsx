@@ -67,7 +67,7 @@ export const AuthForm = (): JSX.Element => {
             <span>
               See
               <a
-                href="https://github.com/pawelmalak/flame/wiki/Authentication"
+                href="https://github.com/pawelmalak/praetorium/wiki/Authentication"
                 target="blank"
               >
                 {` project wiki `}

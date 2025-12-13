@@ -7,13 +7,13 @@ const fs = require('fs');
 // @route     PUT /api/config/0/css
 // @access    Public
 const updateCSS = asyncWrapper(async (req, res, next) => {
-  const file = new File(join(__dirname, '../../public/flame.css'));
+  const file = new File(join(__dirname, '../../public/praetorium.css'));
   file.write(req.body.styles, false);
 
   // Copy file to docker volume
   fs.copyFileSync(
-    join(__dirname, '../../public/flame.css'),
-    join(__dirname, '../../data/flame.css')
+    join(__dirname, '../../public/praetorium.css'),
+    join(__dirname, '../../data/praetorium.css')
   );
 
   res.status(200).json({

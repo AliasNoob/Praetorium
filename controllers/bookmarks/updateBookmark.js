@@ -24,6 +24,10 @@ const updateBookmark = asyncWrapper(async (req, res, next) => {
     categoryId: parseInt(req.body.categoryId),
   };
 
+  if (body.description === undefined) {
+    body.description = '';
+  }
+
   if (body.icon) {
     body.icon = body.icon.trim();
   }

@@ -1,9 +1,9 @@
 version: '3.6'
 
 services:
-  flame:
-    image: ghcr.io/fdarveau/flame:latest
-    container_name: flame
+  praetorium:
+    image: ghcr.io/fdarveau/praetorium:latest
+    container_name: praetorium
     volumes:
       - /path/to/host/data:/app/data
       # - /var/run/docker.sock:/var/run/docker.sock # optional but required for Docker integration
@@ -12,7 +12,7 @@ services:
     # secrets:
     #   - password # optional but required for (1)
     environment:
-      - PASSWORD=flame_password
+      - PASSWORD=praetorium_password
       # - PASSWORD_FILE=/run/secrets/password # optional but required for (1)
     restart: unless-stopped
     

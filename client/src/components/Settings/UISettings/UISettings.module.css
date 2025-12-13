@@ -1,0 +1,31 @@
+.RadioGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.RadioCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.15));
+}
+
+.RadioCard input {
+  margin-top: 4px;
+}
+
+.RadioLabel {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.RadioHint {
+  font-size: 12px;
+  color: var(--color-primary);
+  opacity: 0.8;
+}

@@ -2,22 +2,22 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: flame
+  name: praetorium
 spec:
   selector:
     matchLabels:
-      app: flame
+      app: praetorium
   template:
     metadata:
       labels:
-        app: flame
+        app: praetorium
     spec:
-      serviceAccountName: flame-dev
+      serviceAccountName: praetorium-dev
       securityContext:
         fsGroup: 1000
       containers:
-        - name: flame
-          image: shokohsc/flame
+        - name: praetorium
+          image: shokohsc/praetorium
           command:
             - npm
           args:

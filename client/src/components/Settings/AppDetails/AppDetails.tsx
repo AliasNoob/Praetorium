@@ -28,11 +28,11 @@ export const AppDetails = (): JSX.Element => {
             <SettingsHeadline text="App version" />
             <p className={classes.text}>
               <a
-                href="https://github.com/pawelmalak/flame"
+                href="https://github.com/pawelmalak/praetorium"
                 target="_blank"
                 rel="noreferrer"
               >
-                Flame
+                Praetorium
               </a>{' '}
               version {process.env.REACT_APP_VERSION}
             </p>
@@ -40,7 +40,7 @@ export const AppDetails = (): JSX.Element => {
             <p className={classes.text}>
               See changelog{' '}
               <a
-                href="https://github.com/pawelmalak/flame/blob/master/CHANGELOG.md"
+                href="https://github.com/pawelmalak/praetorium/blob/master/CHANGELOG.md"
                 target="_blank"
                 rel="noreferrer"
               >

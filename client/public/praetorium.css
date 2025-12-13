@@ -1,0 +1,159 @@
+/* --- Theme tokens --- */
+:root {
+  --color-background: #0f1520;
+  --color-panel: #161e2b;
+  --color-panel-strong: #1d2635;
+  --color-primary: #e8eef7;
+  --color-secondary: #9fb3d9;
+  --color-accent: #58d0ff;
+  --color-accent-strong: #2cb2ff;
+  --color-muted: #6e7b95;
+  --card-radius: 12px;
+  --shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.28);
+  --shadow-faint: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
+/* --- Global surface & typography --- */
+body {
+  background: radial-gradient(120% 80% at 20% 20%, rgba(88, 208, 255, 0.05), transparent),
+              radial-gradient(120% 80% at 80% 0%, rgba(255, 143, 255, 0.05), transparent),
+              #0b111b;
+  color: var(--color-primary);
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+h1, h2, h3, h4 { letter-spacing: -0.01em; color: var(--color-primary); }
+.time { color: var(--color-muted) !important; }
+
+/* --- Container & header --- */
+[class*="Container"] {
+  padding: 28px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+[class*="HeaderMain"] {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 28px;
+}
+[class*="Header"] h1 { font-size: 3rem; font-weight: 700; }
+[class*="Header"] p { color: var(--color-muted); text-transform: uppercase; }
+
+/* --- Grids --- */
+[class*="AppGrid"],
+[class*="BookmarkGrid"] {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+  gap: 16px !important;
+}
+
+/* --- Cards (apps & bookmarks) --- */
+[class*="AppCard"],
+[class*="BookmarkCard"] {
+  background: linear-gradient(145deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: var(--card-radius);
+  padding: 14px 14px 10px;
+  box-shadow: var(--shadow-faint);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+[class*="AppCard"]:hover,
+[class*="BookmarkCard"]:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+  border-color: rgba(88, 208, 255, 0.35);
+}
+
+/* Titles inside cards */
+[class*="AppCard"] h3,
+[class*="BookmarkCard"] h3 {
+  color: var(--color-accent);
+  margin-bottom: 10px;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Lists inside cards */
+[class*="Apps"],
+[class*="Bookmarks"] {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+[class*="Apps"] a,
+[class*="Bookmarks"] a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: background 0.16s ease, transform 0.16s ease, color 0.16s ease;
+}
+[class*="Apps"] a:hover,
+[class*="Bookmarks"] a:hover {
+  background: var(--color-panel-strong);
+  color: #fff;
+  transform: translateY(-1px);
+}
+[class*="Apps"] a:active,
+[class*="Bookmarks"] a:active { transform: translateY(0); }
+
+/* Icons */
+[class*="AppIcon"],
+[class*="BookmarkIcon"] {
+  width: 26px !important;
+  height: 26px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent);
+}
+
+/* Text blocks */
+[class*="AppCardDetails"] h5,
+[class*="BookmarkCard"] a span:first-child {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--color-primary);
+}
+[class*="AppCardDetails"] span,
+[class*="BookmarkCard"] a span:last-child {
+  color: var(--color-muted);
+  font-size: 12px;
+  margin-left: auto;
+}
+
+/* Section headline link (Applications/Bookmarks headers) */
+[class*="SectionHeadline"] a {
+  color: var(--color-accent);
+  font-weight: 700;
+  text-decoration: none;
+}
+[class*="SectionHeadline"] a:hover { text-decoration: underline; }
+
+/* Buttons */
+button,
+.btn {
+  background: linear-gradient(120deg, var(--color-accent) 0%, var(--color-accent-strong) 100%);
+  color: #0b111b;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+button:hover,
+.btn:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(44, 178, 255, 0.35); }
+button:active,
+.btn:active { transform: translateY(0); }
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  [class*="Container"] { padding: 16px; }
+  [class*="Header"] h1 { font-size: 2.2rem; }
+}

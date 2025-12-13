@@ -36,7 +36,7 @@
 
 .InputGroup textarea {
   resize: none;
-  height: 50vh;
+  height: 110px;
 }
 
 .InputGroup input[type='color'] {

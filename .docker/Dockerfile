@@ -33,7 +33,7 @@ WORKDIR /app
 EXPOSE 5005
 
 ENV NODE_ENV=production
-ENV PASSWORD=flame_password
+ENV PASSWORD=praetorium_password
 
 # Update permissions and set default user to "node" (provided in base image as user with UID 1000) to be able to run rootless
 RUN chown -R node:node /app

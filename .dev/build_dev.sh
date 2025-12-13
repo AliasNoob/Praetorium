@@ -1,1 +1,1 @@
-docker build -t flame:dev -f .docker/Dockerfile .
+docker build -t praetorium:dev -f .docker/Dockerfile .

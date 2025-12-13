@@ -6,7 +6,7 @@ import { store } from '../store/store';
 export const checkVersion = async (isForced: boolean = false) => {
   try {
     const res = await axios.get<string>(
-      'https://raw.githubusercontent.com/pawelmalak/flame/master/client/.env'
+      'https://raw.githubusercontent.com/pawelmalak/praetorium/master/client/.env'
     );
 
     const githubVersion = res.data
@@ -18,7 +18,7 @@ export const checkVersion = async (isForced: boolean = false) => {
         createNotification({
           title: 'Info',
           message: 'New version is available!',
-          url: 'https://github.com/pawelmalak/flame/blob/master/CHANGELOG.md',
+          url: 'https://github.com/pawelmalak/praetorium/blob/master/CHANGELOG.md',
         })
       );
     } else if (isForced) {

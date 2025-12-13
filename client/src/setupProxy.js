@@ -9,6 +9,11 @@ module.exports = function (app) {
     target: 'http://localhost:5005'
   })
 
+  // Proxy custom CSS so CRA dev server uses backend-saved praetorium.css
+  const cssProxy = createProxyMiddleware('/praetorium.css', {
+    target: 'http://localhost:5005'
+  })
+
   const wsProxy = createProxyMiddleware('/socket', {
     target: 'http://localhost:5005',
     ws: true
@@ -16,5 +21,6 @@ module.exports = function (app) {
 
   app.use(apiProxy);
   app.use(assetsProxy);
+  app.use(cssProxy);
   app.use(wsProxy);
 };

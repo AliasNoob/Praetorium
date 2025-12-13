@@ -3,7 +3,7 @@
   "lat": 0,
   "long": 0,
   "isCelsius": true,
-  "customTitle": "Flame",
+  "customTitle": "Praetorium",
   "pinAppsByDefault": true,
   "pinBookmarksByDefault": true,
   "pinCategoriesByDefault": true,
@@ -31,5 +31,13 @@
   "defaultTheme": "tron",
   "isKilometer": true,
   "weatherData": "cloud",
-  "hideDate": false
+  "hideDate": false,
+  "appCategoryMaxItems": 5,
+  "bookmarkCategoryMaxItems": 7,
+  "categoryHeaderStyle": "underline",
+  "categoryDescriptionColor": "",
+  "appTitleColor": "",
+  "bookmarkTitleColor": "",
+  "categoryUnderlineFade": 0,
+  "bookmarkDescriptionItalic": true
 }

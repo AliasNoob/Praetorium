@@ -7,6 +7,7 @@ import { actionCreators } from '../../../store';
 import { State } from '../../../store/reducers';
 import { inputHandler, uiSettingsTemplate } from '../../../utility';
 import { Button, InputGroup, SettingsHeadline } from '../../UI';
+import styles from './UISettings.module.css';
 
 export const UISettings = (): JSX.Element => {
   const { loading, config } = useSelector((state: State) => state.config);
@@ -20,6 +21,7 @@ export const UISettings = (): JSX.Element => {
   // Get config
   useEffect(() => {
     setFormData({
+      ...uiSettingsTemplate,
       ...config,
     });
   }, [loading]);
@@ -48,6 +50,10 @@ export const UISettings = (): JSX.Element => {
     });
   };
 
+  const clearColor = (key: keyof UISettingsForm) => {
+    setFormData((prev) => ({ ...prev, [key]: '' }));
+  };
+
   return (
     <form onSubmit={(e) => formSubmitHandler(e)}>
       {/* === OTHER OPTIONS === */}
@@ -59,7 +65,7 @@ export const UISettings = (): JSX.Element => {
           type="text"
           id="customTitle"
           name="customTitle"
-          placeholder="Flame"
+          placeholder="Praetorium"
           value={formData.customTitle}
           onChange={(e) => inputChangeHandler(e)}
         />
@@ -214,6 +220,195 @@ export const UISettings = (): JSX.Element => {
           <option value={1}>True</option>
           <option value={0}>False</option>
         </select>
+      </InputGroup>
+
+      {/* === LAYOUT OPTIONS === */}
+      <SettingsHeadline text="Layout" />
+      <InputGroup>
+        <label htmlFor="appCategoryMaxItems">
+          Max apps before using 2 columns
+        </label>
+        <input
+          type="number"
+          id="appCategoryMaxItems"
+          name="appCategoryMaxItems"
+          min={1}
+          value={formData.appCategoryMaxItems}
+          onChange={(e) => inputChangeHandler(e, { isNumber: true })}
+        />
+        <span>Default is 5 items</span>
+      </InputGroup>
+
+      <InputGroup>
+        <label htmlFor="categoryUnderlineFade">
+          Underline fade amount
+        </label>
+        <div className={styles.RadioGrid} role="radiogroup" aria-label="Underline fade amount">
+          <label className={styles.RadioCard}>
+            <input
+              type="radio"
+              name="categoryUnderlineFade"
+              value={0}
+              checked={Number(formData.categoryUnderlineFade) === 0}
+              onChange={(e) => inputChangeHandler(e, { isNumber: true })}
+            />
+            <div>
+              <div className={styles.RadioLabel}>Off</div>
+              <div className={styles.RadioHint}>Solid underline</div>
+            </div>
+          </label>
+          <label className={styles.RadioCard}>
+            <input
+              type="radio"
+              name="categoryUnderlineFade"
+              value={0.35}
+              checked={Number(formData.categoryUnderlineFade) === 0.35}
+              onChange={(e) => inputChangeHandler(e, { isNumber: true })}
+            />
+            <div>
+              <div className={styles.RadioLabel}>Soft fade</div>
+              <div className={styles.RadioHint}>Gentle taper</div>
+            </div>
+          </label>
+          <label className={styles.RadioCard}>
+            <input
+              type="radio"
+              name="categoryUnderlineFade"
+              value={0.65}
+              checked={Number(formData.categoryUnderlineFade) === 0.65}
+              onChange={(e) => inputChangeHandler(e, { isNumber: true })}
+            />
+            <div>
+              <div className={styles.RadioLabel}>Bold fade</div>
+              <div className={styles.RadioHint}>Longer gradient</div>
+            </div>
+          </label>
+        </div>
+      </InputGroup>
+
+      <InputGroup>
+        <label htmlFor="bookmarkCategoryMaxItems">
+          Max bookmarks before using 2 columns
+        </label>
+        <input
+          type="number"
+          id="bookmarkCategoryMaxItems"
+          name="bookmarkCategoryMaxItems"
+          min={1}
+          value={formData.bookmarkCategoryMaxItems}
+          onChange={(e) => inputChangeHandler(e, { isNumber: true })}
+        />
+        <span>Default is 7 items</span>
+      </InputGroup>
+
+      <InputGroup>
+        <label htmlFor="bookmarkDescriptionItalic">Bookmark description style</label>
+        <select
+          id="bookmarkDescriptionItalic"
+          name="bookmarkDescriptionItalic"
+          value={formData.bookmarkDescriptionItalic ? 1 : 0}
+          onChange={(e) => inputChangeHandler(e, { isBool: true })}
+        >
+          <option value={1}>Italic</option>
+          <option value={0}>Standard</option>
+        </select>
+        <span>Controls the small text shown under bookmarks</span>
+      </InputGroup>
+
+      <InputGroup>
+        <label>Category header style</label>
+        <div className={styles.RadioGrid} role="radiogroup" aria-label="Category header style">
+          <label className={styles.RadioCard}>
+            <input
+              type="radio"
+              name="categoryHeaderStyle"
+              value="none"
+              checked={formData.categoryHeaderStyle === 'none'}
+              onChange={(e) => inputChangeHandler(e)}
+            />
+            <div>
+              <div className={styles.RadioLabel}>No decoration</div>
+              <div className={styles.RadioHint}>Just text</div>
+            </div>
+          </label>
+          <label className={styles.RadioCard}>
+            <input
+              type="radio"
+              name="categoryHeaderStyle"
+              value="underline"
+              checked={formData.categoryHeaderStyle === 'underline'}
+              onChange={(e) => inputChangeHandler(e)}
+            />
+            <div>
+              <div className={styles.RadioLabel}>Modern underline</div>
+              <div className={styles.RadioHint}>Matches fade above</div>
+            </div>
+          </label>
+          <label className={styles.RadioCard}>
+            <input
+              type="radio"
+              name="categoryHeaderStyle"
+              value="bubble"
+              checked={formData.categoryHeaderStyle === 'bubble'}
+              onChange={(e) => inputChangeHandler(e)}
+            />
+            <div>
+              <div className={styles.RadioLabel}>Light bubble</div>
+              <div className={styles.RadioHint}>Pill background</div>
+            </div>
+          </label>
+        </div>
+      </InputGroup>
+
+      <InputGroup>
+        <label htmlFor="categoryDescriptionColor">Category description color</label>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <input
+            type="color"
+            id="categoryDescriptionColor"
+            name="categoryDescriptionColor"
+            value={formData.categoryDescriptionColor || '#000000'}
+            onChange={(e) => inputChangeHandler(e)}
+          />
+          <button type="button" onClick={() => clearColor('categoryDescriptionColor')}>
+            Reset
+          </button>
+        </div>
+        <span>Leave empty to inherit theme</span>
+      </InputGroup>
+
+      <InputGroup>
+        <label htmlFor="appTitleColor">App title color</label>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <input
+            type="color"
+            id="appTitleColor"
+            name="appTitleColor"
+            value={formData.appTitleColor || '#000000'}
+            onChange={(e) => inputChangeHandler(e)}
+          />
+          <button type="button" onClick={() => clearColor('appTitleColor')}>
+            Reset
+          </button>
+        </div>
+        <span>Leave empty to use theme default</span>
+      </InputGroup>
+
+      <InputGroup>
+        <label htmlFor="bookmarkTitleColor">Bookmark title color</label>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <input
+            type="color"
+            id="bookmarkTitleColor"
+            name="bookmarkTitleColor"
+            value={formData.bookmarkTitleColor || '#000000'}
+            onChange={(e) => inputChangeHandler(e)}
+          />
+          <button type="button" onClick={() => clearColor('bookmarkTitleColor')}>
+            Reset
+          </button>
+        </div>
+        <span>Leave empty to use theme default</span>
       </InputGroup>
 
       {/* HIDE BOOKMARKS */}

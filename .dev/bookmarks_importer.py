@@ -10,11 +10,11 @@ import argparse
 
 
 """
-Imports html bookmarks file into Flame.
+Imports html bookmarks file into Praetorium.
 Tested only on Firefox html exports so far.
 
 Usage:
-python3 bookmarks_importer.py --bookmarks <path to bookmarks file> --data <path to flame data dir>
+python3 bookmarks_importer.py --bookmarks <path to bookmarks file> --data <path to praetorium data dir>
 
 """
 
@@ -67,7 +67,7 @@ def Base64toPNG(codec, name):
 
 
 
-def FlameBookmarkParser(bookmarks_path):
+def PraetoriumBookmarkParser(bookmarks_path):
 
 	"""
 	Parses HTML bookmarks file
@@ -98,13 +98,13 @@ def FlameBookmarkParser(bookmarks_path):
 			icon         = n.get("icon")
 			if icon != None:
 				icon_name = Base64toPNG(icon, website_name)
-			cat_id = AddFlameCategory(folder_name)
-			AddFlameBookmark(website_name, url, cat_id, icon_name)
+			cat_id = AddPraetoriumCategory(folder_name)
+			AddPraetoriumBookmark(website_name, url, cat_id, icon_name)
 
 
 
 
-def AddFlameCategory(cat_name):
+def AddPraetoriumCategory(cat_name):
 	"""
         Parses HTML bookmarks file
 
@@ -143,7 +143,7 @@ def AddFlameCategory(cat_name):
 
 
 
-def AddFlameBookmark(website_name, url, cat_id, icon_name):
+def AddPraetoriumBookmark(website_name, url, cat_id, icon_name):
 	con = sqlite3.connect(data_path + 'db.sqlite')
 	cur = con.cursor()
 	if icon_name == None:
@@ -163,4 +163,4 @@ def AddFlameBookmark(website_name, url, cat_id, icon_name):
 
 
 if __name__ == "__main__":
-	FlameBookmarkParser(bookmarks_path)
+	PraetoriumBookmarkParser(bookmarks_path)

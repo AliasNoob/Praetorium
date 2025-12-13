@@ -1,8 +1,8 @@
-# Praetorium (Flame Fork) - Agent Reference Guide
+# Praetorium (Praetorium Fork) - Agent Reference Guide
 
 ## Project Overview
 
-Praetorium is a fork of Flame, a self-hosted startpage/dashboard for servers. It displays apps and bookmarks organized into categories on a customizable home page.
+Praetorium is a fork of Praetorium, a self-hosted startpage/dashboard for servers. It displays apps and bookmarks organized into categories on a customizable home page.
 
 ## Tech Stack
 
@@ -83,7 +83,7 @@ Key-value store for settings:
 
 - Simple password-based auth via `PASSWORD` env variable
 - JWT tokens with configurable expiration
-- Token sent in `Authorization-Flame: Bearer <token>` header
+- Token sent in `Authorization-Praetorium: Bearer <token>` header
 - Middleware chain: `auth` (extracts token) → `requireAuth` (enforces auth)
 
 ### Key Files
@@ -190,7 +190,7 @@ npm run dev-client  # Frontend only (react-scripts)
 
 2. **Button onClick not working** - Use `click` prop, not `onClick`
 
-3. **Auth not working** - Check `Authorization-Flame` header, ensure `applyAuth()` is used
+3. **Auth not working** - Check `Authorization-Praetorium` header, ensure `applyAuth()` is used
 
 4. **TypeScript errors** - Check `client/src/interfaces/` for type definitions
 
@@ -206,7 +206,7 @@ npm run dev-client  # Frontend only (react-scripts)
 | Change home layout | `client/src/components/Home/` |
 | Modify auth | `middleware/auth.js`, `controllers/auth/` |
 | Add Redux action | `client/src/store/action-creators/`, `reducers/` |
-| Custom styling | `public/flame.css` or component `.module.css` |
+| Custom styling | `public/praetorium.css` or component `.module.css` |
 
 ## Security Notes
 

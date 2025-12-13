@@ -6,6 +6,7 @@ export const newBookmarkTemplate: NewBookmark = {
   categoryId: -1,
   icon: '',
   isPublic: true,
+  description: '',
 };
 
 export const bookmarkTemplate: Bookmark = {

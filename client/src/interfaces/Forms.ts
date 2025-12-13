@@ -34,6 +34,14 @@ export interface UISettingsForm {
   hideDate: boolean;
   hideSearch: boolean;
   disableAutofocus: boolean;
+  appCategoryMaxItems: number;
+  bookmarkCategoryMaxItems: number;
+  categoryHeaderStyle: 'none' | 'underline' | 'bubble';
+  categoryDescriptionColor: string;
+  appTitleColor: string;
+  bookmarkTitleColor: string;
+  categoryUnderlineFade: number;
+  bookmarkDescriptionItalic: boolean;
 }
 
 export interface DockerSettingsForm {

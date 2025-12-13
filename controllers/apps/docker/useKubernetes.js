@@ -55,16 +55,16 @@ const useKubernetes = async (apps) => {
       const annotations = ingress.metadata.annotations;
 
       if (
-        'flame.pawelmalak/name' in annotations &&
-        'flame.pawelmalak/url' in annotations &&
-        /^app/.test(annotations['flame.pawelmalak/type'])
+        'praetorium.pawelmalak/name' in annotations &&
+        'praetorium.pawelmalak/url' in annotations &&
+        /^app/.test(annotations['praetorium.pawelmalak/type'])
       ) {
         
-        const names = annotations['flame.pawelmalak/.name'].split(';');
-        const urls = annotations['flame.pawelmalak/url'].split(';');
-        const categoriesLabels = annotations['flame.pawelmalak/category'] ? annotations['flame.pawelmalak/category'].split(';') : [];
-        const orders = annotations['flame.pawelmalak/order'] ? annotations['flame.pawelmalak/order'].split(';') : [];
-        const icons = annotations['flame.pawelmalak/icon'] ? annotations['flame.pawelmalak/icon'].split(';') : [];
+        const names = annotations['praetorium.pawelmalak/.name'].split(';');
+        const urls = annotations['praetorium.pawelmalak/url'].split(';');
+        const categoriesLabels = annotations['praetorium.pawelmalak/category'] ? annotations['praetorium.pawelmalak/category'].split(';') : [];
+        const orders = annotations['praetorium.pawelmalak/order'] ? annotations['praetorium.pawelmalak/order'].split(';') : [];
+        const icons = annotations['praetorium.pawelmalak/icon'] ? annotations['praetorium.pawelmalak/icon'].split(';') : [];
 
         for (let i = 0; i < names.length; i++) {            
           let category = categoriesLabels[i] ? categories.find(category => category.name.toUpperCase() === categoriesLabels[i].toUpperCase()) : kubernetesDefaultCategory;
@@ -87,9 +87,9 @@ const useKubernetes = async (apps) => {
         }
 
         kubernetesApps.push({
-          name: annotations['flame.pawelmalak/name'],
-          url: annotations['flame.pawelmalak/url'],
-          icon: annotations['flame.pawelmalak/icon'] || 'kubernetes',
+          name: annotations['praetorium.pawelmalak/name'],
+          url: annotations['praetorium.pawelmalak/url'],
+          icon: annotations['praetorium.pawelmalak/icon'] || 'kubernetes',
         });
       }
     }

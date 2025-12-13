@@ -1,6 +1,8 @@
 import { ChangeEvent, SetStateAction } from 'react';
 
-type Event = ChangeEvent<HTMLInputElement | HTMLSelectElement>;
+type Event = ChangeEvent<
+  HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+>;
 
 interface Options {
   isNumber?: boolean;

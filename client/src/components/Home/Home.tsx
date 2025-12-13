@@ -101,7 +101,7 @@ export const Home = (): JSX.Element => {
       !appCategories.some((a) => a.isPinned) &&
       !bookmarkCategories.some((c) => c.isPinned) ? (
         <Message>
-          Welcome to Flame! Go to <Link to="/settings/app">/settings</Link>,
+          Welcome to Praetorium! Go to <Link to="/settings/app">/settings</Link>,
           login and start customizing your new homepage
         </Message>
       ) : (

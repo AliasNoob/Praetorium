@@ -26,6 +26,6 @@ WORKDIR /app
 EXPOSE 5005
 
 ENV NODE_ENV=production
-ENV PASSWORD=flame_password
+ENV PASSWORD=praetorium_password
 
 CMD ["sh", "-c", "chown -R node /app/data && node server.js"]

@@ -71,7 +71,7 @@ const useDocker = async (apps) => {
       let labels = container.Labels;
 
       // Traefik labels for URL configuration
-      if (!('flame.url' in labels)) {
+      if (!('praetorium.url' in labels)) {
         for (const label of Object.keys(labels)) {
           if (/^traefik.*.frontend.rule/.test(label)) {
             // Traefik 1.x
@@ -79,7 +79,7 @@ const useDocker = async (apps) => {
 
             if (value.indexOf('Host') !== -1) {
               value = value.split('Host:')[1];
-              labels['flame.url'] =
+              labels['praetorium.url'] =
                 'https://' + value.split(',').join(';https://');
             }
           } else if (/^traefik.*?\.rule/.test(label)) {
@@ -95,24 +95,24 @@ const useDocker = async (apps) => {
               }
 
               if (domains.length > 0) {
-                labels['flame.url'] = domains.join(';');
+                labels['praetorium.url'] = domains.join(';');
               }
             }
           }
         }
       }
 
-      // add each container as flame formatted app
+      // add each container as praetorium formatted app
       if (
-        'flame.name' in labels &&
-        'flame.url' in labels &&
-        /^app/.test(labels['flame.type'])
+        'praetorium.name' in labels &&
+        'praetorium.url' in labels &&
+        /^app/.test(labels['praetorium.type'])
       ) {
-        const names = labels['flame.name'].split(';');
-        const urls = labels['flame.url'].split(';');
-        const categoriesLabels = labels['flame.category'] ? labels['flame.category'].split(';') : [];
-        const orders = labels['flame.order'] ? labels['flame.order'].split(';') : [];
-        const icons = labels['flame.icon'] ? labels['flame.icon'].split(';') : [];
+        const names = labels['praetorium.name'].split(';');
+        const urls = labels['praetorium.url'].split(';');
+        const categoriesLabels = labels['praetorium.category'] ? labels['praetorium.category'].split(';') : [];
+        const orders = labels['praetorium.order'] ? labels['praetorium.order'].split(';') : [];
+        const icons = labels['praetorium.icon'] ? labels['praetorium.icon'].split(';') : [];
 
         for (let i = 0; i < names.length; i++) {     
           let category = categoriesLabels[i] ? categories.find(category => category.name.toUpperCase() === categoriesLabels[i].toUpperCase()) : dockerDefaultCategory;

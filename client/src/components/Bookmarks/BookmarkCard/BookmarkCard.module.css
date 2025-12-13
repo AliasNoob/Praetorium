@@ -2,32 +2,122 @@
   margin-bottom: 30px;
 }
 
-.BookmarkCard h3 {
+.CategoryTitle {
   color: var(--color-accent);
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 500;
   text-transform: uppercase;
+  position: relative;
+  display: inline-block;
 }
 
 .BookmarkHeader:hover {
   cursor: pointer;
 }
 
+.CategoryUnderline {
+  display: block;
+  width: 100%;
+}
+
+.CategoryUnderline::after {
+  content: '';
+  display: block;
+  margin-top: 6px;
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, var(--underline-fade-start, 0.35)),
+    rgba(255, 255, 255, var(--underline-fade-end, 0))
+  );
+  border-radius: 999px;
+}
+
+.CategoryUnderlineWide::after {
+  width: 100%;
+}
+
+.CategoryUnderlineWide {
+  display: block;
+  width: 100%;
+}
+
+.CategoryBubble {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.CategoryBubbleWide {
+  width: 100%;
+  display: block;
+}
+
 .Bookmarks {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.TwoColumns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 14px;
 }
 
 .Bookmarks a {
   transition: all 0.25s;
   display: flex;
-  margin-bottom: 10px;
+  align-items: center;
+  margin-bottom: 0;
+  padding: 6px 8px;
+  border-radius: 8px;
+  gap: 8px;
 }
 
 .BookmarkCard a:hover {
   text-decoration: underline;
   padding-left: 10px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.TextBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.BookmarkDescription {
+  display: block;
+  font-size: 12px;
+  color: var(--color-primary);
+  opacity: 0.8;
+  margin-top: 2px;
+}
+
+.Italic {
+  font-style: italic;
+}
+
+.OverflowBadge {
+  margin-right: 6px;
+  color: var(--color-primary);
+  display: inline-flex;
+  align-items: center;
+  font-size: 1em;
+  line-height: 1;
+}
+
+.OverflowBadge:hover {
+  color: var(--color-accent);
+}
+
+.OverflowText {
+  font-weight: 700;
+  font-size: 1em;
+  line-height: 1;
 }
 
 .BookmarkIcon {

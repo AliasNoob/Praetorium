@@ -6,6 +6,7 @@ export interface NewBookmark {
   categoryId: number;
   icon: string;
   isPublic: boolean;
+  description?: string;
 }
 
 export interface Bookmark extends Model, NewBookmark {

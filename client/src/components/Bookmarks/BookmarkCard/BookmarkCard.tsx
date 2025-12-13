@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Link } from 'react-router-dom';
 
 import { Bookmark, Category } from '../../../interfaces';
 import { actionCreators } from '../../../store';
@@ -22,23 +23,84 @@ export const BookmarkCard = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const { setEditCategory } = bindActionCreators(actionCreators, dispatch);
 
+  const threshold = config.bookmarkCategoryMaxItems ?? 7;
+  const maxItems = Math.max(1, threshold * 2);
+  const isTwoColumns = category.bookmarks.length >= threshold;
+  const hasOverflow = category.bookmarks.length > maxItems;
+  const displayBookmarks = category.bookmarks.slice(0, maxItems);
+
+  const headerStyleClass =
+    config.categoryHeaderStyle === 'underline'
+      ? classes.CategoryUnderline
+      : config.categoryHeaderStyle === 'bubble'
+      ? classes.CategoryBubble
+      : '';
+
+  const headerWidthClass =
+    isTwoColumns && config.categoryHeaderStyle === 'underline'
+      ? classes.CategoryUnderlineWide
+      : isTwoColumns && config.categoryHeaderStyle === 'bubble'
+      ? classes.CategoryBubbleWide
+      : '';
+
+  const headerClasses = [
+    classes.CategoryTitle,
+    headerStyleClass,
+    headerWidthClass,
+    fromHomepage || !isAuthenticated ? '' : classes.BookmarkHeader,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const headerStyle =
+    config.categoryHeaderStyle === 'underline'
+      ? ({
+          ['--underline-fade-start' as any]: config.categoryUnderlineFade === 0 ? 1 : config.categoryUnderlineFade ?? 0.35,
+          ['--underline-fade-end' as any]: config.categoryUnderlineFade === 0 ? 1 : 0,
+        } as React.CSSProperties)
+      : undefined;
+
+  const bookmarkTitleStyle = config.bookmarkTitleColor
+    ? { color: config.bookmarkTitleColor }
+    : undefined;
+
+  const descriptionClass = [
+    classes.BookmarkDescription,
+    config.bookmarkDescriptionItalic ? classes.Italic : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
     <div className={classes.BookmarkCard}>
       <h3
-        className={
-          fromHomepage || !isAuthenticated ? '' : classes.BookmarkHeader
-        }
+        className={headerClasses}
+        style={headerStyle}
         onClick={() => {
           if (!fromHomepage && isAuthenticated) {
             setEditCategory(category);
           }
         }}
       >
+        {hasOverflow && (
+          <Link
+            to="/settings/interface"
+            className={classes.OverflowBadge}
+            title="Too many bookmarks in this category. Click to adjust settings."
+            aria-label="Too many bookmarks in this category. Click to adjust settings."
+          >
+            <span className={classes.OverflowText}>!</span>
+          </Link>
+        )}
         {category.name}
       </h3>
 
-      <div className={classes.Bookmarks}>
-        {category.bookmarks.map((bookmark: Bookmark) => {
+      <div
+        className={[classes.Bookmarks, isTwoColumns ? classes.TwoColumns : '']
+          .filter(Boolean)
+          .join(' ')}
+      >
+        {displayBookmarks.map((bookmark: Bookmark) => {
           const redirectUrl = urlParser(bookmark.url)[1];
 
           let iconEl: JSX.Element = <Fragment></Fragment>;
@@ -85,9 +147,15 @@ export const BookmarkCard = (props: Props): JSX.Element => {
               target={config.bookmarksSameTab ? '' : '_blank'}
               rel="noreferrer"
               key={`bookmark-${bookmark.id}`}
+              style={bookmarkTitleStyle}
             >
               {bookmark.icon && iconEl}
-              {bookmark.name}
+              <span className={classes.TextBlock}>
+                <span style={bookmarkTitleStyle}>{bookmark.name}</span>
+                {bookmark.description ? (
+                  <span className={descriptionClass}>{bookmark.description}</span>
+                ) : null}
+              </span>
             </a>
           );
         })}

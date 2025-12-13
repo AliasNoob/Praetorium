@@ -1,6 +1,16 @@
 {
   "routes": [
     {
+      "name": "Bookmarks",
+      "dest": "/bookmarks",
+      "authRequired": false
+    },
+    {
+      "name": "Applications",
+      "dest": "/applications",
+      "authRequired": false
+    },
+    {
       "name": "Theme",
       "dest": "/settings",
       "authRequired": false

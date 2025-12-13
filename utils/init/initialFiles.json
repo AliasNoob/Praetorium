@@ -1,7 +1,7 @@
 {
   "files": [
     {
-      "name": "flame.css",
+      "name": "praetorium.css",
       "msg": {
         "created": "Created empty CSS file",
         "found": "Custom CSS file found"

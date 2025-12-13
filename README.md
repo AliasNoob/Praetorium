@@ -1,139 +1,154 @@
-# Flame
+# Praetorium
 
 ![Homescreen screenshot](.github/home.png)
 
-## Important note
-If you encounter any problem, you can open an Issue in this fork so I can look into it. 
+Praetorium is a self-hosted start page ("application hub") for your homelab/server. It’s designed to be configured from the UI: add apps + bookmarks, pin favourites, theme it, and keep everything behind optional authentication.
 
-Since this is a fork aimed at adding app categories only, no new features will be added, but bugs will be fixed if I can reproduce them on my setup. If my setup does not allow me to reproduce bugs reported (such as the ones involving Kubernetes, which I don't use), I will ask the person who opened the issue to test a bugfix build before publishing the fix.
+## Acknowledgements / Upstream
 
-## Description
+This repository is a fork.
 
-Flame is self-hosted startpage for your server. Its design is inspired (heavily) by [SUI](https://github.com/jeroenpardon/sui). Flame is very easy to setup and use. With built-in editors, it allows you to setup your very own application hub in no time - no file editing necessary.
+- Original project: `pawelmalak/praetorium` (the upstream that introduced Praetorium)
+- Design inspiration: [SUI](https://github.com/jeroenpardon/sui)
 
-## Functionality
-- 📝 Create, update, delete your applications and bookmarks directly from the app using built-in GUI editors
-- 📌 Pin your favourite items to the homescreen for quick and easy access
-- 🔍 Integrated search bar with local filtering, 11 web search providers and ability to add your own
-- 🔑 Authentication system to protect your settings, apps and bookmarks
-- 🔨 Dozens of options to customize Flame interface to your needs, including support for custom CSS, 15 built-in color themes and custom theme builder
-- ☀️ Weather widget with current temperature, cloud coverage and animated weather status
-- 🐳 Docker integration to automatically pick and add apps based on their labels
+Upstream docs and changelog history may be referenced in this README where the behaviour matches.
 
-## Installation
+## What’s new in this fork
 
-### With Docker (recommended)
+This fork focuses on **App Categories** and category-aware integrations.
 
-```sh
-docker pull ghcr.io/fdarveau/flame:latest
+- **App categories (first-class)**: apps can be assigned to categories via `categoryId`, with a dedicated Categories API.
+- **Ordering + pinning for categories**: categories have `orderId`, can be pinned, and respect the instance ordering setting.
+- **Docker integration: category-aware**: Docker labels can specify `praetorium.category`; unknown categories are created automatically.
 
-# for ARM architecture (e.g. RaspberryPi)
-docker pull ghcr.io/fdarveau/flame:latest-multiarch
+## Features
 
-# installing specific version
-docker pull ghcr.io/fdarveau/flame:2021-12-12
-```
+- Create, update, delete your applications and bookmarks from the UI
+- Pin favourites to the home screen
+- Search bar with local filtering and web providers
+- Authentication to protect settings
+- Customization: themes, custom CSS
+- Weather widget
+- Integrations: Docker labels, Kubernetes ingress annotations
 
-#### Deployment
+## Quick start
 
-```sh
-# run container
-docker run -p 5005:5005 -v /path/to/data:/app/data -e PASSWORD=flame_password ghcr.io/fdarveau/flame:latest
-```
+### Docker (build locally)
 
-#### Building images
+This repo includes Dockerfiles under `.docker/`.
 
 ```sh
-# build image for amd64 only
-docker build -t flame -f .docker/Dockerfile .
+docker build -t praetorium -f .docker/Dockerfile .
 
-# build multiarch image for amd64, armv7 and arm64
-# building failed multiple times with 2GB memory usage limit so you might want to increase it
-docker buildx build \
-  --platform linux/arm/v7,linux/arm64,linux/amd64 \
-  -f .docker/Dockerfile.multiarch \
-  -t flame:multiarch .
+docker run \
+  -p 5005:5005 \
+  -v /path/to/host/data:/app/data \
+  -e PASSWORD=praetorium_password \
+  praetorium
 ```
 
-#### Docker-Compose
+Optional (required for Docker integration): mount the Docker socket.
+
+```sh
+docker run \
+  -p 5005:5005 \
+  -v /path/to/host/data:/app/data \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -e PASSWORD=praetorium_password \
+  praetorium
+```
+
+### Docker Compose
+
+You can start from `.docker/docker-compose.yml`. A minimal example that builds locally:
 
 ```yaml
 version: '3.6'
 
 services:
-  flame:
-    image: ghcr.io/fdarveau/flame:latest
-    container_name: flame
-    volumes:
-      - /path/to/host/data:/app/data
-      - /var/run/docker.sock:/var/run/docker.sock # optional but required for Docker integration
+  praetorium:
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    container_name: praetorium
     ports:
       - 5005:5005
-    secrets:
-      - password # optional but required for (1)
+    volumes:
+      - /path/to/host/data:/app/data
+      # - /var/run/docker.sock:/var/run/docker.sock # optional but required for Docker integration
     environment:
-      - PASSWORD=flame_password
-      - PASSWORD_FILE=/run/secrets/password # optional but required for (1)
+      - PASSWORD=praetorium_password
     restart: unless-stopped
-
-# optional but required for Docker secrets (1)
-secrets:
-  password:
-    file: /path/to/secrets/password
 ```
 
-##### Docker Secrets
-
-All environment variables can be overwritten by appending `_FILE` to the variable value. For example, you can use `PASSWORD_FILE` to pass through a docker secret instead of `PASSWORD`. If both `PASSWORD` and `PASSWORD_FILE` are set, the docker secret will take precedent.
-
-```bash
-# ./secrets/flame_password
-my_custom_secret_password_123
-
-# ./docker-compose.yml
-secrets:
-  password:
-    file: ./secrets/flame_password
-```
-
-#### Skaffold
+### Local development (no Docker)
 
 ```sh
-# use skaffold
-skaffold dev
-```
-
-### Without Docker
-
-Follow instructions from wiki: [Installation without Docker](https://github.com/pawelmalak/flame/wiki/Installation-without-docker)
-
-## Development
-
-### Technology
-
-- Backend
-  - Node.js + Express
-  - Sequelize ORM + SQLite
-- Frontend
-  - React
-  - Redux
-  - TypeScript
-- Deployment
-  - Docker
-  - Kubernetes
-
-### Creating dev environment
-
-```sh
-# clone repository
-git clone https://github.com/pawelmalak/flame
-cd flame
-
-# run only once
 npm run dev-init
-
-# start backend and frontend development servers
 npm run dev
+```
+
+## Configuration
+
+Praetorium reads environment variables (see `.env` for defaults in this repo).
+
+Common variables:
+
+- `PORT`: backend port (default `5005`)
+- `PASSWORD`: password used for authentication
+- `SECRET`: JWT signing secret
+- `NODE_ENV`: `development` or `production`
+
+Data persistence:
+
+- SQLite DB: `./data/db.sqlite`
+- Additional config/assets: `./data/*`
+
+## Usage
+
+### Authentication
+
+See upstream docs: <https://github.com/pawelmalak/praetorium/wiki/Authentication>
+
+### Search bar
+
+Example: `/g what is docker` (prefix selects a provider). More details: <https://github.com/pawelmalak/praetorium/wiki/Search-bar>
+
+### Weather
+
+1. Get an API key from <https://www.weatherapi.com/>
+2. Find your latitude/longitude
+3. Enter it in settings and save
+
+### Docker integration labels
+
+Each container can provide labels like:
+
+```yml
+labels:
+  - praetorium.type=application # "app" works too
+  - praetorium.name=My container
+  - praetorium.url=https://example.com
+  - praetorium.category=My category # Optional; if missing defaults to "Docker"
+  - praetorium.icon=icon-name # Optional; default "docker"
+  - praetorium.order=1 # Optional; default 500 (lower shows first)
+```
+
+Multiple apps per container are supported by separating values with `;`.
+
+### Kubernetes integration annotations
+
+Ingress annotations example:
+
+```yml
+metadata:
+  annotations:
+    praetorium.pawelmalak/type: application # "app" works too
+    praetorium.pawelmalak/name: My app
+    praetorium.pawelmalak/url: https://example.com
+    praetorium.pawelmalak/category: My category # Optional; default "Kubernetes"
+    praetorium.pawelmalak/icon: icon-name # Optional
+    praetorium.pawelmalak/order: "1" # Optional
 ```
 
 ## Screenshots
@@ -146,111 +161,12 @@ npm run dev
 
 ![Themes screenshot](.github/themes.png)
 
-## Usage
+## Roadmap (ideas)
 
-### Authentication
+These are potential future improvements (not guarantees). If you want one, open an issue and we can prioritize.
 
-Visit [project wiki](https://github.com/pawelmalak/flame/wiki/Authentication) to read more about authentication
-
-### Search bar
-
-#### Searching
-
-The default search setting is to search through all your apps and bookmarks. If you want to search using specific search engine, you need to type your search query with selected prefix. For example, to search for "what is docker" using google search you would type: `/g what is docker`.
-
-For list of supported search engines, shortcuts and more about searching functionality visit [project wiki](https://github.com/pawelmalak/flame/wiki/Search-bar).
-
-### Setting up weather module
-
-1. Obtain API Key from [Weather API](https://www.weatherapi.com/pricing.aspx).
-   > Free plan allows for 1M calls per month. Flame is making less then 3K API calls per month.
-2. Get lat/long for your location. You can get them from [latlong.net](https://www.latlong.net/convert-address-to-lat-long.html).
-3. Enter and save data. Weather widget will now update and should be visible on Home page.
-
-### Docker integration
-
-In order to use the Docker integration, each container must have the following labels:
-
-```yml
-labels:
-  - flame.type=application # "app" works too
-  - flame.name=My container
-  - flame.url=https://example.com
-  - flame.category=My category # Optional, default is "Docker"
-  - flame.icon=icon-name # Optional, default is "docker"
-  - flame.order=1 # Optional, default is 500; lower number is first in the list
-```
-
-> "Use Docker API" option must be enabled for this to work. You can find it in Settings > Docker
-
-You can also set up different apps in the same label adding `;` between each one.
-
-```yml
-labels:
-  - flame.type=application
-  - flame.name=First App;Second App
-  - flame.url=https://example1.com;https://example2.com
-  - flame.icon=icon-name1;icon-name2
-```
-
-If you want to use a remote docker host follow this instructions in the host:
-
-- Open the file `/lib/systemd/system/docker.service`, search for `ExecStart` and edit the value
-
-```text
-ExecStart=/usr/bin/dockerd -H tcp://0.0.0.0:${PORT} -H unix:///var/run/docker.sock
-```
-
->The above command will bind the docker engine server to the Unix socket as well as TCP port of your choice. “0.0.0.0” means docker-engine accepts connections from all IP addresses.
-
-- Restart the daemon and Docker service
-
-```shell
-sudo systemctl daemon-reload
-sudo service docker restart
-```
-
-- Test if it is working
-
-```shell
-curl http://${IP}:${PORT}/version
-```
-
-### Kubernetes integration
-
-In order to use the Kubernetes integration, each ingress must have the following annotations:
-
-```yml
-metadata:
-  annotations:
-  - flame.pawelmalak/type=application # "app" works too
-  - flame.pawelmalak/name=My container
-  - flame.pawelmalak/url=https://example.com
-  - flame.pawelmalak/category=My category # Optional, default is "Kubernetes"
-  - flame.pawelmalak/icon=icon-name # Optional, default is "kubernetes"
-  - flame.pawelmalak/order=1 # Optional, default is 500; lower number is first in the list
-```
-
-> "Use Kubernetes Ingress API" option must be enabled for this to work. You can find it in Settings > Docker
-
-### Import HTML Bookmarks (Experimental)
-
-- Requirements
-  - python3
-  - pip packages: Pillow, beautifulsoup4
-- Backup your `db.sqlite` before running script!
-- Known Issues:
-  - generated icons are sometimes incorrect
-
-```bash
-pip3 install Pillow, beautifulsoup4
-
-cd flame/.dev
-python3 bookmarks_importer.py --bookmarks <path to bookmarks.html> --data <path to flame data folder>
-```
-
-### Custom CSS and themes
-
-> This is an experimental feature. Its behaviour might change in the future.
->
-> Follow instructions from wiki: [Custom CSS](https://github.com/pawelmalak/flame/wiki/Custom-CSS)
+- Category UX polish: faster bulk-assign and reorder flows
+- Category permissions: per-category visibility rules for guest mode
+- Import/export: backup/restore of apps/bookmarks/categories as a single bundle
+- Integrations: richer label/annotation support (descriptions, public/private, icons)
+- Observability: clearer integration health + last sync status for Docker/Kubernetes

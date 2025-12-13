@@ -15,6 +15,14 @@ export const uiSettingsTemplate: UISettingsForm = {
   hideDate: false,
   hideSearch: false,
   disableAutofocus: false,
+  appCategoryMaxItems: 5,
+  bookmarkCategoryMaxItems: 7,
+  categoryHeaderStyle: 'underline',
+  categoryDescriptionColor: '',
+  appTitleColor: '',
+  bookmarkTitleColor: '',
+  categoryUnderlineFade: 0,
+  bookmarkDescriptionItalic: true,
 };
 
 export const weatherSettingsTemplate: WeatherForm = {

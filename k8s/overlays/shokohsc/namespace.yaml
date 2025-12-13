@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: flame-dev
+  name: praetorium-dev
   labels:
-    namespace: flame-dev
+    namespace: praetorium-dev
     goldilocks.fairwinds.com/enabled: "true"

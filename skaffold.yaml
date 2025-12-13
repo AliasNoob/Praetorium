@@ -1,10 +1,10 @@
 apiVersion: skaffold/v2beta20
 kind: Config
 metadata:
-  name: flame
+  name: praetorium
 build:
   artifacts:
-  - image: shokohsc/flame
+  - image: shokohsc/praetorium
     context: .
     sync:
       manual:
@@ -22,7 +22,7 @@ profiles:
   - command: dev
   build:
     artifacts:
-    - image: shokohsc/flame
+    - image: shokohsc/praetorium
       sync:
         manual:
         - src: controllers/*.js
@@ -32,7 +32,7 @@ profiles:
 - name: shokohsc
   build:
     artifacts:
-    - image: shokohsc/flame
+    - image: shokohsc/praetorium
       sync:
         manual:
         - src: controllers/*.js
@@ -40,7 +40,7 @@ profiles:
       kaniko:
         dockerfile: Dockerfile.dev
         cache:
-          repo: shokohsc/flame
+          repo: shokohsc/praetorium
     cluster:
       dockerConfig:
         secretName: kaniko-secret
@@ -53,11 +53,11 @@ profiles:
 - name: prod
   build:
     artifacts:
-    - image: shokohsc/flame
+    - image: shokohsc/praetorium
       kaniko:
         dockerfile: Dockerfile
         cache:
-          repo: shokohsc/flame
+          repo: shokohsc/praetorium
     cluster:
       dockerConfig:
         secretName: kaniko-secret

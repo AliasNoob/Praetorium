@@ -34,4 +34,12 @@ export interface Config {
   isKilometer: boolean;
   weatherData: WeatherData;
   hideDate: boolean;
+  appCategoryMaxItems: number;
+  bookmarkCategoryMaxItems: number;
+  categoryHeaderStyle: 'none' | 'underline' | 'bubble';
+  categoryDescriptionColor: string;
+  appTitleColor: string;
+  bookmarkTitleColor: string;
+  categoryUnderlineFade: number;
+  bookmarkDescriptionItalic: boolean;
 }

@@ -48,7 +48,7 @@ export const BookmarksForm = ({
   }, [bookmark]);
 
   const inputChangeHandler = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
     options?: { isNumber?: boolean; isBool?: boolean }
   ) => {
     inputHandler<NewBookmark>({
@@ -87,6 +87,7 @@ export const BookmarksForm = ({
       }
       data.append('name', formData.name);
       data.append('url', formData.url);
+      data.append('description', formData.description || '');
       data.append('categoryId', `${formData.categoryId}`);
       data.append('isPublic', `${formData.isPublic ? 1 : 0}`);
 
@@ -181,6 +182,18 @@ export const BookmarksForm = ({
           required
           value={formData.url}
           onChange={(e) => inputChangeHandler(e)}
+        />
+      </InputGroup>
+
+      <InputGroup>
+        <label htmlFor="description">Bookmark description (optional)</label>
+        <textarea
+          name="description"
+          id="description"
+          placeholder="Short hint shown under the bookmark"
+          value={formData.description || ''}
+          onChange={(e) => inputChangeHandler(e)}
+          rows={2}
         />
       </InputGroup>
 
