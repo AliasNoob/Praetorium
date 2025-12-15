@@ -1,10 +1,14 @@
-import { WeatherData } from '../types';
+import { WeatherData, WeatherProvider } from '../types';
 
 export interface Config {
   WEATHER_API_KEY: string;
   lat: number;
   long: number;
   isCelsius: boolean;
+  weatherProvider: WeatherProvider;
+  weatherWidgetDesign: 'design1' | 'design2' | 'design3';
+  weatherDetailsUrl: string;
+  weatherGlass: boolean;
   customTitle: string;
   pinAppsByDefault: boolean;
   pinBookmarksByDefault: boolean;

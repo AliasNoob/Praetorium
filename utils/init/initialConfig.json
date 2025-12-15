@@ -1,4 +1,8 @@
 {
+  "weatherProvider": "weatherapi",
+  "weatherWidgetDesign": "design1",
+  "weatherDetailsUrl": "",
+  "weatherGlass": true,
   "WEATHER_API_KEY": "",
   "lat": 0,
   "long": 0,

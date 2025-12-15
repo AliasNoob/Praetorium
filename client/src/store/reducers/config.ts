@@ -24,13 +24,13 @@ export const configReducer = (
       return {
         ...state,
         loading: false,
-        config: action.payload,
+        config: { ...configTemplate, ...action.payload },
       };
 
     case ActionType.updateConfig:
       return {
         ...state,
-        config: action.payload,
+        config: { ...configTemplate, ...action.payload },
       };
 
     case ActionType.fetchQueries:

@@ -10,3 +10,4 @@ export * from './Forms';
 export * from './Query';
 export * from './SearchResult';
 export * from './Route';
+export * from './WeatherForecast';

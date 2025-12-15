@@ -1,11 +1,15 @@
-import { WeatherData } from '../types';
+import { WeatherData, WeatherProvider } from '../types';
 
 export interface WeatherForm {
+  weatherProvider: WeatherProvider;
   WEATHER_API_KEY: string;
   lat: number;
   long: number;
   isCelsius: boolean;
   weatherData: WeatherData;
+  weatherWidgetDesign: 'design1' | 'design2' | 'design3';
+  weatherDetailsUrl: string;
+  weatherGlass: boolean;
 }
 
 export interface GeneralForm {

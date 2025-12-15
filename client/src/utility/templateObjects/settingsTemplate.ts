@@ -26,11 +26,15 @@ export const uiSettingsTemplate: UISettingsForm = {
 };
 
 export const weatherSettingsTemplate: WeatherForm = {
+  weatherProvider: 'weatherapi',
   WEATHER_API_KEY: '',
   lat: 0,
   long: 0,
   isCelsius: true,
   weatherData: 'cloud',
+  weatherWidgetDesign: 'design1',
+  weatherDetailsUrl: '',
+  weatherGlass: true,
 };
 
 export const generalSettingsTemplate: GeneralForm = {
