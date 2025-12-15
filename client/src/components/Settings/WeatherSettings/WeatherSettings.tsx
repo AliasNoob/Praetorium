@@ -32,7 +32,7 @@ export const WeatherSettings = (): JSX.Element => {
     setFormData({
       ...config,
     });
-  }, [loading]);
+  }, [config, loading]);
 
   // Form handler
   const formSubmitHandler = async (e: FormEvent) => {
@@ -130,8 +130,22 @@ export const WeatherSettings = (): JSX.Element => {
           step="any"
           lang="en-150"
         />
-        <span onClick={getLocation}>
-          <a href="#">Click to get current location</a>
+        <span>
+          <button
+            type="button"
+            onClick={getLocation}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: 0,
+              color: 'inherit',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+              font: 'inherit',
+            }}
+          >
+            Click to get current location
+          </button>
         </span>
       </InputGroup>
 

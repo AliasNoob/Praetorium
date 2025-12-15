@@ -1,4 +1,4 @@
-import { KeyboardEvent, useEffect, useRef } from 'react';
+import { KeyboardEvent, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -22,18 +22,26 @@ export const SearchBar = (props: Props): JSX.Element => {
   const { config, loading } = useSelector((state: State) => state.config);
 
   const dispatch = useDispatch();
-  const { createNotification } = bindActionCreators(actionCreators, dispatch);
+  const { createNotification } = useMemo(
+    () => bindActionCreators(actionCreators, dispatch),
+    [dispatch]
+  );
 
   const { setLocalSearch, appSearchResult, bookmarkSearchResult } = props;
 
   const inputRef = useRef<HTMLInputElement>(document.createElement('input'));
+
+  const clearSearch = useCallback(() => {
+    inputRef.current.value = '';
+    setLocalSearch('');
+  }, [setLocalSearch]);
 
   // Search bar autofocus
   useEffect(() => {
     if (!loading && !config.disableAutofocus) {
       inputRef.current.focus();
     }
-  }, [config]);
+  }, [config.disableAutofocus, loading]);
 
   // Listen for keyboard events outside of search bar
   useEffect(() => {
@@ -53,12 +61,7 @@ export const SearchBar = (props: Props): JSX.Element => {
     window.addEventListener('keyup', keyOutsideFocus);
 
     return () => window.removeEventListener('keyup', keyOutsideFocus);
-  }, []);
-
-  const clearSearch = () => {
-    inputRef.current.value = '';
-    setLocalSearch('');
-  };
+  }, [clearSearch]);
 
   const searchHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     const {

@@ -34,7 +34,7 @@ export const Themer = (): JSX.Element => {
     setFormData({
       ...config,
     });
-  }, [loading]);
+  }, [config, loading]);
 
   // Form handler
   const formSubmitHandler = async (e: FormEvent) => {

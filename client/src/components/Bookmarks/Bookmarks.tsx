@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
@@ -30,8 +30,10 @@ export const Bookmarks = (props: Props): JSX.Element => {
 
   // Get Redux action creators
   const dispatch = useDispatch();
-  const { setEditCategory, setEditBookmark } =
-    bindActionCreators(actionCreators, dispatch);
+  const { setEditCategory, setEditBookmark } = useMemo(
+    () => bindActionCreators(actionCreators, dispatch),
+    [dispatch]
+  );
 
   // Form
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -57,12 +59,12 @@ export const Bookmarks = (props: Props): JSX.Element => {
       setTableContentType(ContentType.bookmark);
       setShowTable(true);
     }
-  }, [categoryInEdit]);
+  }, [categoryInEdit, modalIsOpen]);
 
   useEffect(() => {
     setShowTable(false);
     setEditCategory(null);
-  }, []);
+  }, [setEditCategory]);
 
   // Form actions
   const toggleModal = (): void => {

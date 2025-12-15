@@ -1,6 +1,6 @@
 import 'external-svg-loader';
 
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
@@ -32,7 +32,7 @@ export const App = (): JSX.Element => {
 
   const dispath = useDispatch();
   const { fetchQueries, setTheme, logout, createNotification, fetchThemes } =
-    bindActionCreators(actionCreators, dispath);
+    useMemo(() => bindActionCreators(actionCreators, dispath), [dispath]);
 
   useEffect(() => {
     // check if token is valid
@@ -66,7 +66,7 @@ export const App = (): JSX.Element => {
     fetchQueries();
 
     return () => window.clearInterval(tokenIsValid);
-  }, []);
+  }, [createNotification, fetchQueries, fetchThemes, logout, setTheme]);
 
   // If there is no user theme, set the default one
   useEffect(() => {

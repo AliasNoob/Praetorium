@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators } from '../../../store';
@@ -14,7 +14,10 @@ interface Props {
 
 export const Notification = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
-  const { clearNotification } = bindActionCreators(actionCreators, dispatch);
+  const { clearNotification } = useMemo(
+    () => bindActionCreators(actionCreators, dispatch),
+    [dispatch]
+  );
 
   const [isOpen, setIsOpen] = useState(true);
   const elementClasses = [
@@ -35,7 +38,7 @@ export const Notification = (props: Props): JSX.Element => {
       window.clearTimeout(closeNotification);
       window.clearTimeout(clearNotificationTimeout);
     };
-  }, []);
+  }, [clearNotification, props.id]);
 
   const clickHandler = () => {
     if (props.url) {

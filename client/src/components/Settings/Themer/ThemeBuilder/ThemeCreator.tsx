@@ -36,7 +36,7 @@ export const ThemeCreator = ({ modalHandler }: Props): JSX.Element => {
   });
 
   useEffect(() => {
-    setFormData({ ...formData, colors: activeTheme.colors });
+    setFormData((prev) => ({ ...prev, colors: activeTheme.colors }));
   }, [activeTheme.colors]);
 
   useEffect(() => {

@@ -18,7 +18,6 @@ export const WeatherWidget = (): JSX.Element => {
   );
 
   const [weather, setWeather] = useState<Weather>(weatherTemplate);
-  const [isLoading, setIsLoading] = useState(true);
 
   // Initial request to get data
   useEffect(() => {
@@ -29,7 +28,6 @@ export const WeatherWidget = (): JSX.Element => {
         if (weatherData) {
           setWeather(weatherData);
         }
-        setIsLoading(false);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -43,10 +41,10 @@ export const WeatherWidget = (): JSX.Element => {
 
     webSocketClient.onmessage = (e) => {
       const data = JSON.parse(e.data);
-      setWeather({
-        ...weather,
+      setWeather((prev) => ({
+        ...prev,
         ...data,
-      });
+      }));
     };
 
     return () => webSocketClient.close();

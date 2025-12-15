@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent, useMemo } from 'react';
 import axios from 'axios';
 
 // Redux
@@ -48,7 +48,10 @@ interface LayoutBookmark {
 
 export const LayoutSettings = (): JSX.Element => {
   const dispatch = useDispatch();
-  const { createNotification, getCategories } = bindActionCreators(actionCreators, dispatch);
+  const { createNotification, getCategories } = useMemo(
+    () => bindActionCreators(actionCreators, dispatch),
+    [dispatch]
+  );
 
   const [layoutJson, setLayoutJson] = useState<string>('');
   const [isValidJson, setIsValidJson] = useState<boolean>(true);
@@ -78,7 +81,7 @@ export const LayoutSettings = (): JSX.Element => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [createNotification]);
 
   // Validate JSON on change
   const validateJson = (jsonString: string): boolean => {

@@ -24,7 +24,7 @@ export const UISettings = (): JSX.Element => {
       ...uiSettingsTemplate,
       ...config,
     });
-  }, [loading]);
+  }, [config, loading]);
 
   // Form handler
   const formSubmitHandler = async (e: FormEvent) => {

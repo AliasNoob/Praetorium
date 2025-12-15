@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
@@ -24,9 +24,9 @@ export const Home = (): JSX.Element => {
   const isAuthenticated = useSelector((state: State) => state.auth.isAuthenticated);
 
   const dispatch = useDispatch();
-  const { getCategories } = bindActionCreators(
-    actionCreators,
-    dispatch
+  const { getCategories } = useMemo(
+    () => bindActionCreators(actionCreators, dispatch),
+    [dispatch]
   );
 
   // Local search query
@@ -41,7 +41,7 @@ export const Home = (): JSX.Element => {
     if (!appCategories.length && !bookmarkCategories.length) {
       getCategories();
     }
-  }, [appCategories.length, bookmarkCategories.length]);
+  }, [appCategories.length, bookmarkCategories.length, getCategories]);
 
   useEffect(() => {
     if (localSearch) {
