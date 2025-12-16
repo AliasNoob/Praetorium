@@ -1,22 +1,75 @@
-version: '3.6'
+# =============================================================================
+# Praetorium Docker Compose
+# =============================================================================
+# This file builds locally since no public registry image is available yet.
+#
+# Quick start:
+#   1. Copy this file to your deployment location
+#   2. Set your password: export PRAETORIUM_PASSWORD="your-secure-password"
+#   3. Run: docker compose up -d
+#
+# For Portainer users:
+#   - Set PRAETORIUM_PASSWORD in the environment variables section
+#   - Optionally change PRAETORIUM_PORT (default: 5005)
+#   - If using a reverse proxy, set BASE_URL to your external URL
+# =============================================================================
 
 services:
   praetorium:
-    image: ghcr.io/fdarveau/praetorium:latest
+    build:
+      context: ..
+      dockerfile: .docker/Dockerfile
+    image: praetorium:local
     container_name: praetorium
-    volumes:
-      - /path/to/host/data:/app/data
-      # - /var/run/docker.sock:/var/run/docker.sock # optional but required for Docker integration
-    ports:
-      - 5005:5005
-    # secrets:
-    #   - password # optional but required for (1)
-    environment:
-      - PASSWORD=praetorium_password
-      # - PASSWORD_FILE=/run/secrets/password # optional but required for (1)
-    restart: unless-stopped
     
-# optional but required for Docker secrets (1)
+    # --- Volumes ---
+    # Named volume (recommended) - Docker manages the data location
+    volumes:
+      - praetorium_data:/app/data
+      # Optional: Docker integration (uncomment to enable)
+      # - /var/run/docker.sock:/var/run/docker.sock:ro
+    
+    # --- Ports ---
+    # Change the host port (left side) if 5005 is already in use
+    # Example: "8080:5005" to access via port 8080
+    ports:
+      - "${PRAETORIUM_PORT:-5005}:5005"
+    
+    # --- Environment Variables ---
+    environment:
+      - NODE_ENV=production
+      # REQUIRED: Set your password (use env var or secrets below)
+      - PASSWORD=${PRAETORIUM_PASSWORD:-changeme}
+      # Optional: For reverse proxy setups, set your external base URL
+      # - BASE_URL=https://home.example.com
+      # Optional: Use Docker secrets instead of PASSWORD env var
+      # - PASSWORD_FILE=/run/secrets/praetorium_password
+    
+    # --- Docker Secrets (more secure than env vars) ---
+    # Uncomment to use secrets instead of PASSWORD environment variable
+    # secrets:
+    #   - praetorium_password
+    
+    # --- Health Check ---
+    # Container reports healthy when API is responding
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5005/api/config"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
+    restart: unless-stopped
+
+# --- Named Volumes ---
+volumes:
+  praetorium_data:
+    name: praetorium_data
+
+# --- Secrets (uncomment if using Docker secrets) ---
 # secrets:
-#   password:
-#     file: /path/to/secrets/password
+#   praetorium_password:
+#     # Option 1: Read from a file
+#     file: ./secrets/password.txt
+#     # Option 2: Use external secret (for Docker Swarm)
+#     # external: true

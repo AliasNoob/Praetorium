@@ -6,12 +6,13 @@ Praetorium is a self-hosted start page ("application hub") for your homelab/serv
 
 ## Acknowledgements / Upstream
 
-This repository is a fork.
+This repository is a fork of `fdarveau/praetorium`, which itself was a fork of the original project.
 
 - Original project: `pawelmalak/praetorium` (the upstream that introduced Praetorium)
+- Intermediate fork: `fdarveau/praetorium`
 - Design inspiration: [SUI](https://github.com/jeroenpardon/sui)
 
-Upstream docs and changelog history may be referenced in this README where the behaviour matches.
+> **Note:** The old `ghcr.io/fdarveau/praetorium` container image is no longer accessible. This fork builds locally and does not depend on any external registry.
 
 ## What’s new in this fork
 
@@ -33,52 +34,79 @@ This fork focuses on **App Categories** and category-aware integrations.
 
 ## Quick start
 
+### Docker Compose (recommended)
+
+The easiest way to run Praetorium:
+
+```sh
+# Clone the repo
+git clone https://github.com/adavenport/praetorium.git
+cd praetorium
+
+# Set your password and start
+export PRAETORIUM_PASSWORD="your-secure-password"
+docker compose -f .docker/docker-compose.yml up -d
+```
+
+Access Praetorium at `http://localhost:5005`
+
+#### Configuration options
+
+| Environment Variable | Default | Description |
+|---------------------|---------|-------------|
+| `PRAETORIUM_PASSWORD` | `changeme` | **Required.** Authentication password |
+| `PRAETORIUM_PORT` | `5005` | Host port mapping |
+| `BASE_URL` | - | External URL for reverse proxy setups |
+
+#### Using Docker secrets (more secure)
+
+For production, use Docker secrets instead of environment variables:
+
+```sh
+# Create secrets directory and password file
+mkdir -p secrets
+echo "your-secure-password" > secrets/password.txt
+chmod 600 secrets/password.txt
+```
+
+Then uncomment the secrets sections in `docker-compose.yml` and change `PASSWORD` to `PASSWORD_FILE`.
+
+#### Portainer deployment
+
+1. Create a new Stack from the compose file
+2. Add environment variable: `PRAETORIUM_PASSWORD=your-secure-password`
+3. Optionally set `PRAETORIUM_PORT` if 5005 is in use
+4. Deploy the stack
+
 ### Docker (build locally)
 
-This repo includes Dockerfiles under `.docker/`.
+Build and run manually:
 
 ```sh
+# Build the image
 docker build -t praetorium -f .docker/Dockerfile .
 
-docker run \
+# Run with a named volume (recommended)
+docker run -d \
+  --name praetorium \
   -p 5005:5005 \
-  -v /path/to/host/data:/app/data \
-  -e PASSWORD=praetorium_password \
+  -v praetorium_data:/app/data \
+  -e PASSWORD=your-secure-password \
   praetorium
 ```
 
-Optional (required for Docker integration): mount the Docker socket.
+#### With Docker integration
+
+To enable Docker container discovery, mount the Docker socket:
 
 ```sh
-docker run \
+docker run -d \
+  --name praetorium \
   -p 5005:5005 \
-  -v /path/to/host/data:/app/data \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  -e PASSWORD=praetorium_password \
+  -v praetorium_data:/app/data \
+  -v /var/run/docker.sock:/var/run/docker.sock:ro \
+  -e PASSWORD=your-secure-password \
   praetorium
-```
-
-### Docker Compose
-
-You can start from `.docker/docker-compose.yml`. A minimal example that builds locally:
-
-```yaml
-version: '3.6'
-
-services:
-  praetorium:
-    build:
-      context: .
-      dockerfile: .docker/Dockerfile
-    container_name: praetorium
-    ports:
-      - 5005:5005
-    volumes:
-      - /path/to/host/data:/app/data
-      # - /var/run/docker.sock:/var/run/docker.sock # optional but required for Docker integration
-    environment:
-      - PASSWORD=praetorium_password
-    restart: unless-stopped
 ```
 
 ### Local development (no Docker)
