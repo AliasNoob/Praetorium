@@ -2,7 +2,7 @@ const { join } = require('path');
 const fs = require('fs').promises;
 const { v4: uuidv4 } = require('uuid');
 
-const DOCKER_HOSTS_FILE = join(__dirname, '../data/dockerHosts.json');
+const DOCKER_HOSTS_FILE = join(__dirname, '../../../data/dockerHosts.json');
 
 /**
  * Load Docker hosts from file
