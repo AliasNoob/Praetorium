@@ -14,6 +14,8 @@ WORKDIR /build
 
 # Install build dependencies for native modules
 RUN apk add --no-cache python3 make g++
+# Upgrade npm to a version that handles the lockfile correctly
+RUN npm install -g npm@11.6.4
 
 # Copy only package files first (better layer caching)
 COPY client/package*.json ./
@@ -34,6 +36,8 @@ WORKDIR /deps
 
 # Install build dependencies for native modules (sqlite3, etc.)
 RUN apk add --no-cache python3 make g++
+# Keep npm aligned with client-builder stage
+RUN npm install -g npm@11.6.4
 
 # Copy only package files first
 COPY package*.json ./
