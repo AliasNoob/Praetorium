@@ -9,6 +9,16 @@ import {
 } from './app';
 import { AuthErrorAction, AutoLoginAction, LoginAction, LogoutAction } from './auth';
 import {
+  DockerAction,
+  TestDockerAction,
+  TestDockerLoadingAction,
+  TestDockerErrorAction,
+  FetchDockerHostsAction,
+  AddDockerHostAction,
+  UpdateDockerHostAction,
+  DeleteDockerHostAction,
+} from './docker';
+import {
   AddBookmarkAction,
   DeleteBookmarkAction,
   ReorderBookmarksAction,
@@ -90,4 +100,13 @@ export type Action =
   | LoginAction
   | LogoutAction
   | AutoLoginAction
-  | AuthErrorAction;
+  | AuthErrorAction
+  // Docker
+  | DockerAction
+  | TestDockerAction
+  | TestDockerLoadingAction
+  | TestDockerErrorAction
+  | FetchDockerHostsAction
+  | AddDockerHostAction
+  | UpdateDockerHostAction
+  | DeleteDockerHostAction;

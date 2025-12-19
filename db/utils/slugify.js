@@ -1,5 +1,16 @@
 const slugify = () => {
-  const version = process.env.VERSION;
+  let version = process.env.VERSION;
+
+  // Fallback: read from package.json or use 'unknown'
+  if (!version) {
+    try {
+      const pkg = require('../../package.json');
+      version = pkg.version || 'unknown';
+    } catch {
+      version = 'unknown';
+    }
+  }
+
   const slug = `db-${version.replace(/\./g, '')}-backup.sqlite`;
   return slug;
 };

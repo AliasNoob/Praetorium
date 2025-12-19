@@ -11,3 +11,4 @@ export * from './Query';
 export * from './SearchResult';
 export * from './Route';
 export * from './WeatherForecast';
+export * from './Docker';

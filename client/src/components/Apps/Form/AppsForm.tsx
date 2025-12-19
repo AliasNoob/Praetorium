@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { App, Category, NewApp } from '../../../interfaces';
+import { App, Category, NewApp, DockerService } from '../../../interfaces';
 import { actionCreators } from '../../../store';
 import { State } from '../../../store/reducers';
 import { inputHandler, newAppTemplate } from '../../../utility';
@@ -19,16 +19,21 @@ interface Props {
   app?: App;
 }
 
+type AppSource = 'manual' | 'docker';
+
 export const AppsForm = ({
   app,
   modalHandler,
 }: Props): JSX.Element => {
   const { categories } = useSelector((state: State) => state.apps);
+  const { services: dockerResult } = useSelector((state: State) => state.docker);
 
   const dispatch = useDispatch();
   const { addApp, updateApp, createNotification } =
     bindActionCreators(actionCreators, dispatch);
 
+  const [appSource, setAppSource] = useState<AppSource>('manual');
+  const [selectedDockerService, setSelectedDockerService] = useState<string>('');
   const [useCustomIcon, toggleUseCustomIcon] = useState<boolean>(false);
   const [customIcon, setCustomIcon] = useState<File | null>(null);
 
@@ -38,10 +43,31 @@ export const AppsForm = ({
   useEffect(() => {
     if (app) {
       setFormData({ ...app });
+      setAppSource('manual'); // Editing always uses manual mode
     } else {
       setFormData(newAppTemplate);
     }
   }, [app]);
+
+  // Handle Docker service selection
+  const handleDockerServiceChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const serviceId = e.target.value;
+    setSelectedDockerService(serviceId);
+
+    if (serviceId && dockerResult && dockerResult.allServices) {
+      const service = dockerResult.allServices.find((s) => s.id === serviceId);
+      if (service) {
+        // Auto-populate form fields from Docker service
+        setFormData((prev) => ({
+          ...prev,
+          name: service.name,
+          url: service.suggestedUrl || '',
+          icon: 'docker',
+          description: `${service.image} - ${service.status}`,
+        }));
+      }
+    }
+  };
 
   const inputChangeHandler = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -128,6 +154,7 @@ export const AppsForm = ({
         categoryId: formData.categoryId,
         isPublic: formData.isPublic,
       });
+      setSelectedDockerService('');
     } else {
       // update
       if (!checkCategory()) return;
@@ -152,8 +179,55 @@ export const AppsForm = ({
     setCustomIcon(null);
   };
 
+  const hasDockerServices = dockerResult && dockerResult.allServices && dockerResult.allServices.length > 0;
+
   return (
     <ModalForm modalHandler={modalHandler} formHandler={formSubmitHandler}>
+      {/* APP SOURCE SELECTOR - Only show when adding new app and Docker services are available */}
+      {!app && hasDockerServices && (
+        <InputGroup>
+          <label htmlFor="appSource">Add app from</label>
+          <select
+            id="appSource"
+            name="appSource"
+            value={appSource}
+            onChange={(e) => {
+              setAppSource(e.target.value as AppSource);
+              if (e.target.value === 'manual') {
+                setSelectedDockerService('');
+                setFormData(newAppTemplate);
+              }
+            }}
+          >
+            <option value="manual">Manual entry</option>
+            <option value="docker">
+              From Docker ({dockerResult.totalContainers} services)
+            </option>
+          </select>
+        </InputGroup>
+      )}
+
+      {/* DOCKER SERVICE SELECTOR */}
+      {!app && appSource === 'docker' && hasDockerServices && (
+        <InputGroup>
+          <label htmlFor="dockerService">Select Docker Service</label>
+          <select
+            id="dockerService"
+            name="dockerService"
+            value={selectedDockerService}
+            onChange={handleDockerServiceChange}
+          >
+            <option value="">-- Select a service --</option>
+            {dockerResult.allServices.map((service: DockerService) => (
+              <option key={service.id} value={service.id}>
+                {service.name} ({service.hostName}) - {service.state}
+              </option>
+            ))}
+          </select>
+          <span>Select a Docker container to auto-populate the form fields</span>
+        </InputGroup>
+      )}
+
       {/* NAME */}
       <InputGroup>
         <label htmlFor="name">App name</label>

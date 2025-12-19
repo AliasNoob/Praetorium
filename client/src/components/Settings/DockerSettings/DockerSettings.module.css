@@ -1,0 +1,260 @@
+.ErrorMessage {
+  background-color: rgba(220, 53, 69, 0.1);
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+/* Hosts Management */
+.HostsContainer {
+  margin-bottom: 1.5rem;
+}
+
+.NoHosts {
+  color: var(--color-primary);
+  opacity: 0.7;
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.HostsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.HostItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+}
+
+.HostInfo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.HostName {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.HostAddress {
+  font-size: 0.9rem;
+  color: var(--color-primary);
+  opacity: 0.7;
+  font-family: monospace;
+}
+
+.HostEnabled {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background-color: rgba(108, 117, 125, 0.3);
+  color: var(--color-primary);
+}
+
+.HostEnabled[data-enabled='true'] {
+  background-color: rgba(40, 167, 69, 0.2);
+  color: #28a745;
+}
+
+.HostEnabled[data-enabled='false'] {
+  background-color: rgba(220, 53, 69, 0.2);
+  color: #dc3545;
+}
+
+.HostActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.IconButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.IconButton:hover {
+  opacity: 1;
+}
+
+.HostEditForm,
+.AddHostForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.HostEditForm input,
+.AddHostForm input {
+  padding: 0.5rem;
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  background-color: var(--color-background);
+  color: var(--color-primary);
+}
+
+.HostEditActions,
+.AddHostActions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.HelpNote {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--color-primary);
+  opacity: 0.7;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+/* Results Display */
+.ResultsContainer {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ResultsContainer h4 {
+  margin: 0 0 1rem 0;
+  color: var(--color-primary);
+}
+
+.HostResultSection {
+  margin-bottom: 1rem;
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.HostResultSection:last-child {
+  margin-bottom: 0;
+}
+
+.HostResultHeader {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.75rem;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.HostResultName {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.HostResultAddress {
+  font-size: 0.85rem;
+  color: var(--color-primary);
+  opacity: 0.7;
+}
+
+.HostResultSuccess {
+  margin-left: auto;
+  color: #28a745;
+  font-size: 0.85rem;
+}
+
+.HostResultError {
+  margin-left: auto;
+  color: #dc3545;
+  font-size: 0.85rem;
+}
+
+.ServicesContainer {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ServicesContainer h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--color-primary);
+}
+
+.InfoText {
+  font-size: 0.85rem;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.ServicesList {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.ServiceItem {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--color-primary);
+}
+
+.ServiceItem:last-child {
+  border-bottom: none;
+}
+
+.ServiceName {
+  font-weight: 600;
+  min-width: 150px;
+  color: var(--color-primary);
+}
+
+.ServiceStatus {
+  font-size: 0.8rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background-color: var(--color-background);
+  color: var(--color-primary);
+}
+
+.ServiceStatus[data-state='running'] {
+  background-color: rgba(40, 167, 69, 0.2);
+  color: #28a745;
+}
+
+.ServiceStatus[data-state='exited'] {
+  background-color: rgba(220, 53, 69, 0.2);
+  color: #dc3545;
+}
+
+.ServiceStatus[data-state='paused'] {
+  background-color: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+
+.ServiceUrl {
+  font-size: 0.85rem;
+  color: var(--color-accent);
+  margin-left: auto;
+}

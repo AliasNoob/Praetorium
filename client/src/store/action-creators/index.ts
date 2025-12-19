@@ -5,3 +5,4 @@ export * from './app';
 export * from './bookmark';
 export * from './category';
 export * from './auth';
+export * from './docker';

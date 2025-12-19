@@ -46,9 +46,14 @@ RUN npm ci --omit=dev
 # -----------------------------------------------------------------------------
 FROM node:22-alpine AS runtime
 
+# Version is passed from CI or defaults to 'dev'
+ARG VERSION=dev
+ENV VERSION=${VERSION}
+
 LABEL org.opencontainers.image.title="Praetorium"
 LABEL org.opencontainers.image.description="Self-hosted start page for your homelab"
 LABEL org.opencontainers.image.source="https://github.com/adavenport/praetorium"
+LABEL org.opencontainers.image.version="${VERSION}"
 
 WORKDIR /app
 

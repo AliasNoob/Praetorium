@@ -39,16 +39,39 @@ This fork focuses on **App Categories** and category-aware integrations.
 The easiest way to run Praetorium:
 
 ```sh
-# Clone the repo
-git clone https://github.com/adavenport/praetorium.git
-cd praetorium
-
-# Set your password and start
+# Set your password and start (pulls from GitHub Container Registry)
 export PRAETORIUM_PASSWORD="your-secure-password"
-docker compose -f .docker/docker-compose.yml up -d
+curl -O https://raw.githubusercontent.com/adavenport/praetorium/master/.docker/docker-compose.prod.yml
+docker compose -f docker-compose.prod.yml up -d
 ```
 
 Access Praetorium at `http://localhost:5005`
+
+#### Upgrading
+
+Praetorium uses semantic versioning. Upgrades are safe and non-destructive:
+
+```sh
+# Option 1: Update to latest
+docker compose -f docker-compose.prod.yml pull
+docker compose -f docker-compose.prod.yml up -d
+
+# Option 2: Pin to a specific version
+export PRAETORIUM_TAG=v2.4.0
+docker compose -f docker-compose.prod.yml pull
+docker compose -f docker-compose.prod.yml up -d
+```
+
+**What happens during an upgrade:**
+- Your data volume (`praetorium_data`) is preserved
+- Database migrations run automatically on startup
+- A backup is created in `/app/data/db_backups/` before migrations
+
+**Rollback to a previous version:**
+```sh
+export PRAETORIUM_TAG=v2.3.1  # or whatever version you want
+docker compose -f docker-compose.prod.yml up -d
+```
 
 #### Configuration options
 
@@ -56,6 +79,7 @@ Access Praetorium at `http://localhost:5005`
 |---------------------|---------|-------------|
 | `PRAETORIUM_PASSWORD` | `changeme` | **Required.** Authentication password |
 | `PRAETORIUM_PORT` | `5005` | Host port mapping |
+| `PRAETORIUM_TAG` | `latest` | Docker image tag (e.g., `v2.4.0`, `2.4`, `latest`) |
 | `BASE_URL` | - | External URL for reverse proxy setups |
 
 #### Using Docker secrets (more secure)
@@ -80,7 +104,18 @@ Then uncomment the secrets sections in `docker-compose.yml` and change `PASSWORD
 
 ### Docker (build locally)
 
-Build and run manually:
+If you prefer to build from source (for development or customization):
+
+```sh
+# Clone the repo
+git clone https://github.com/adavenport/praetorium.git
+cd praetorium
+
+# Build and run
+docker compose -f .docker/docker-compose.yml up -d --build
+```
+
+Or build manually:
 
 ```sh
 # Build the image

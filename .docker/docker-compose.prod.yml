@@ -1,0 +1,68 @@
+# =============================================================================
+# Praetorium Docker Compose - Production (Image Pull)
+# =============================================================================
+# This file pulls from the GitHub Container Registry instead of building locally.
+# Use this for easy upgrades: just change the tag and run `docker compose pull`.
+#
+# Quick start:
+#   1. Copy this file to your deployment location
+#   2. Set your password: export PRAETORIUM_PASSWORD="your-secure-password"
+#   3. Run: docker compose -f docker-compose.prod.yml up -d
+#
+# Upgrade to a new version:
+#   1. Change TAG below (or set PRAETORIUM_TAG env var)
+#   2. Run: docker compose -f docker-compose.prod.yml pull
+#   3. Run: docker compose -f docker-compose.prod.yml up -d
+#
+# Rollback:
+#   1. Set TAG to the previous version (e.g., v2.3.1)
+#   2. Run: docker compose -f docker-compose.prod.yml up -d
+# =============================================================================
+
+services:
+  praetorium:
+    # Pull from GitHub Container Registry
+    # Change the tag to upgrade: latest, v2.4.0, 2.4, etc.
+    image: ghcr.io/adavenport/praetorium:${PRAETORIUM_TAG:-latest}
+    container_name: praetorium
+
+    # --- Volumes ---
+    # Named volume for persistent data (config, database, backups)
+    # This survives container upgrades - DO NOT remove unless you want to reset
+    volumes:
+      - praetorium_data:/app/data
+      # Optional: Docker integration (uncomment to enable container discovery)
+      # - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    # --- Ports ---
+    # Change the host port (left side) if 5005 is already in use
+    ports:
+      - "${PRAETORIUM_PORT:-5005}:5005"
+
+    # --- Environment Variables ---
+    environment:
+      - NODE_ENV=production
+      # REQUIRED: Set your password (use env var or secrets below)
+      - PASSWORD=${PRAETORIUM_PASSWORD:-changeme}
+      # Optional: For reverse proxy setups
+      # - BASE_URL=https://home.example.com
+
+    # --- Health Check ---
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5005/api/config"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+    restart: unless-stopped
+
+# --- Named Volumes ---
+# The praetorium_data volume stores:
+#   - data/db.sqlite (your apps, bookmarks, categories)
+#   - data/config.json (your settings)
+#   - data/db_backups/ (automatic pre-migration backups)
+#   - data/uploads/ (custom icons)
+volumes:
+  praetorium_data:
+    name: praetorium_data

@@ -14,6 +14,14 @@ export enum ActionType {
   deleteQuery = 'DELETE_QUERY',
   fetchQueries = 'FETCH_QUERIES',
   updateQuery = 'UPDATE_QUERY',
+  // DOCKER
+  testDocker = 'TEST_DOCKER',
+  testDockerLoading = 'TEST_DOCKER_LOADING',
+  testDockerError = 'TEST_DOCKER_ERROR',
+  fetchDockerHosts = 'FETCH_DOCKER_HOSTS',
+  addDockerHost = 'ADD_DOCKER_HOST',
+  updateDockerHost = 'UPDATE_DOCKER_HOST',
+  deleteDockerHost = 'DELETE_DOCKER_HOST',
   // NOTIFICATIONS
   createNotification = 'CREATE_NOTIFICATION',
   clearNotification = 'CLEAR_NOTIFICATION',

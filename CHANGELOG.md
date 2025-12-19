@@ -1,3 +1,11 @@
+### v2.5.0 (2024-12-19)
+- Added multi-host Docker support - manage multiple Docker servers (local and remote)
+- Added "Test Docker Connection" button to discover containers from all configured hosts
+- Added ability to select Docker containers when adding apps to auto-populate form fields
+- Added read-only JSON display of discovered Docker services in settings
+- Added Docker hosts management UI (add, edit, delete, enable/disable hosts)
+- Improved Docker connection handling for both TCP and Unix socket connections
+
 ### v2.3.1 (2023-07-23)
 - Fixed bug where "Open search results in the same tab" setting was not respected if "Local search" was set as primary search provider ([#270](https://github.com/pawelmalak/praetorium/issues/270))
 - Fixed bug where search bar had rounded input field on iOS ([#394](https://github.com/pawelmalak/praetorium/issues/394))
