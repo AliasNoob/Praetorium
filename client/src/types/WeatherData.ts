@@ -1,1 +1,1 @@
-export type WeatherData = 'cloud' | 'humidity';
+export type WeatherData = 'cloud' | 'humidity' | 'precipitation';

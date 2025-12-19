@@ -295,7 +295,15 @@ export const WeatherSettings = (): JSX.Element => {
         >
           <option value="cloud">Cloud coverage</option>
           <option value="humidity">Humidity</option>
+          {!usingWeatherApi && (
+            <option value="precipitation">Next precipitation</option>
+          )}
         </select>
+        <span>
+          {!usingWeatherApi && formData.weatherData === 'precipitation'
+            ? 'Shows next rain/snow event with time (e.g., "55% 🌧️ @ 2PM")'
+            : 'Select additional data to display on the weather widget'}
+        </span>
       </InputGroup>
 
       <Button>Save changes</Button>
