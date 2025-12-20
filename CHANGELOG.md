@@ -1,3 +1,10 @@
+### v2.6.0 (2024-12-20)
+- Enhanced Docker service URL auto-population with comprehensive fallback logic
+- Added IP:Port auto-population from Docker container public ports
+- Added IP-only fallback when containers have no public ports exposed
+- Improved localhost detection (supports localhost, localhost:port, 127.0.0.1, 127.0.0.1:port)
+- Optimized Docker service discovery performance
+
 ### v2.5.0 (2024-12-19)
 - Added multi-host Docker support - manage multiple Docker servers (local and remote)
 - Added "Test Docker Connection" button to discover containers from all configured hosts
