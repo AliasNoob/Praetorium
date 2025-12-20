@@ -121,16 +121,19 @@ const transformContainers = (containers, hostConfig) => {
       const hostAddress = getHostAddress();
       
       if (hostAddress) {
-        // Start with IP-only URL as base fallback
-        suggestedUrl = `http://${hostAddress}`;
-        
-        // Try to find a public port to append
+        // Try to find a public port first
+        let publicPort = null;
         if (ports.length > 0) {
           const portWithPublic = ports.find((p) => p.PublicPort);
           if (portWithPublic) {
-            suggestedUrl = `http://${hostAddress}:${portWithPublic.PublicPort}`;
+            publicPort = portWithPublic.PublicPort;
           }
         }
+        
+        // Construct URL once with or without port
+        suggestedUrl = publicPort 
+          ? `http://${hostAddress}:${publicPort}`
+          : `http://${hostAddress}`;
       }
     }
 
