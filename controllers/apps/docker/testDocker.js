@@ -63,6 +63,16 @@ const fetchContainersFromHost = async (hostConfig) => {
  * Transform raw container data into useful format
  */
 const transformContainers = (containers, hostConfig) => {
+  // Helper to get the host address (without port) - defined once outside the loop
+  const getHostAddress = () => {
+    if (!hostConfig.host) {
+      return null;
+    }
+    return hostConfig.host.includes('localhost') 
+      ? 'localhost' 
+      : hostConfig.host.split(':')[0];
+  };
+
   return containers.map((container) => {
     const labels = container.Labels || {};
     const names = container.Names?.map((n) => n.replace(/^\//, '')) || [];
@@ -95,32 +105,21 @@ const transformContainers = (containers, hostConfig) => {
       }
     }
 
-    // Helper to get the host address (without port)
-    const getHostAddress = () => {
-      if (!hostConfig.host) {
-        return null;
-      }
-      return hostConfig.host.includes('localhost') 
-        ? 'localhost' 
-        : hostConfig.host.split(':')[0];
-    };
-
     // Fallback: use exposed ports with host IP
     if (!suggestedUrl) {
       const hostAddress = getHostAddress();
       
-      if (hostAddress && ports.length > 0) {
-        // Try to use public port if available
-        const port = ports.find((p) => p.PublicPort) || ports[0];
-        if (port.PublicPort) {
-          suggestedUrl = `http://${hostAddress}:${port.PublicPort}`;
-        } else {
-          // No public port available, use IP only
-          suggestedUrl = `http://${hostAddress}`;
-        }
-      } else if (hostAddress) {
-        // No ports at all, use IP only
+      if (hostAddress) {
+        // Start with IP-only URL as base fallback
         suggestedUrl = `http://${hostAddress}`;
+        
+        // Try to find a public port to append
+        if (ports.length > 0) {
+          const portWithPublic = ports.find((p) => p.PublicPort);
+          if (portWithPublic) {
+            suggestedUrl = `http://${hostAddress}:${portWithPublic.PublicPort}`;
+          }
+        }
       }
     }
 
