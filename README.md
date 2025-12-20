@@ -233,3 +233,7 @@ These are potential future improvements (not guarantees). If you want one, open 
 - Import/export: backup/restore of apps/bookmarks/categories as a single bundle
 - Integrations: richer label/annotation support (descriptions, public/private, icons)
 - Observability: clearer integration health + last sync status for Docker/Kubernetes
+- Start Page Command Center: One page to rule them all Ability to launch Desktop applications / Scripts
+- Calander & Todo Integrations
+- Notes & News Integrations
+- AI Integrations 
