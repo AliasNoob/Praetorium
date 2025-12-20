@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "private": true,
   "dependencies": {
     "@mdi/js": "^7.4.47",
