@@ -105,24 +105,21 @@ const transformContainers = (containers, hostConfig) => {
         : hostConfig.host.split(':')[0];
     };
 
-    // Fallback: use first exposed port with host IP
-    if (!suggestedUrl && ports.length > 0) {
-      const port = ports.find((p) => p.PublicPort) || ports[0];
-      const hostAddress = getHostAddress();
-      
-      if (hostAddress && port.PublicPort) {
-        // IP with port
-        suggestedUrl = `http://${hostAddress}:${port.PublicPort}`;
-      } else if (hostAddress) {
-        // Fallback to IP only if no public port is available
-        suggestedUrl = `http://${hostAddress}`;
-      }
-    }
-    
-    // Final fallback: if no ports at all, just use the host address
+    // Fallback: use exposed ports with host IP
     if (!suggestedUrl) {
       const hostAddress = getHostAddress();
-      if (hostAddress) {
+      
+      if (hostAddress && ports.length > 0) {
+        // Try to use public port if available
+        const port = ports.find((p) => p.PublicPort) || ports[0];
+        if (port.PublicPort) {
+          suggestedUrl = `http://${hostAddress}:${port.PublicPort}`;
+        } else {
+          // No public port available, use IP only
+          suggestedUrl = `http://${hostAddress}`;
+        }
+      } else if (hostAddress) {
+        // No ports at all, use IP only
         suggestedUrl = `http://${hostAddress}`;
       }
     }
