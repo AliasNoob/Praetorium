@@ -98,13 +98,25 @@ const transformContainers = (containers, hostConfig) => {
     // Fallback: use first exposed port with host IP
     if (!suggestedUrl && ports.length > 0) {
       const port = ports.find((p) => p.PublicPort) || ports[0];
+      const hostAddress = hostConfig.host.includes('localhost') 
+        ? 'localhost' 
+        : hostConfig.host.split(':')[0];
+      
       if (port.PublicPort) {
-        // Use the host's IP/hostname for remote, localhost for local
-        const hostAddress = hostConfig.host.includes('localhost') 
-          ? 'localhost' 
-          : hostConfig.host.split(':')[0];
+        // IP with port
         suggestedUrl = `http://${hostAddress}:${port.PublicPort}`;
+      } else {
+        // Fallback to IP only if no public port is available
+        suggestedUrl = `http://${hostAddress}`;
       }
+    }
+    
+    // Final fallback: if no ports at all, just use the host address
+    if (!suggestedUrl && hostConfig.host) {
+      const hostAddress = hostConfig.host.includes('localhost') 
+        ? 'localhost' 
+        : hostConfig.host.split(':')[0];
+      suggestedUrl = `http://${hostAddress}`;
     }
 
     return {
