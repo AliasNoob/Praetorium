@@ -68,11 +68,20 @@ const transformContainers = (containers, hostConfig) => {
     if (!hostConfig || !hostConfig.host) {
       return null;
     }
-    // For localhost, we use 'localhost' as-is for better compatibility
-    // For remote hosts, extract the IP/hostname by splitting at the colon
-    return hostConfig.host.includes('localhost') 
-      ? 'localhost' 
-      : hostConfig.host.split(':')[0];
+    
+    const host = hostConfig.host;
+    
+    // Check if this is localhost (with or without port)
+    // Valid localhost formats: 'localhost', 'localhost:2375', '127.0.0.1', '127.0.0.1:2375'
+    if (host === 'localhost' || host.startsWith('localhost:') || 
+        host === '127.0.0.1' || host.startsWith('127.0.0.1:')) {
+      return 'localhost';
+    }
+    
+    // For remote hosts, extract the IP/hostname before the port (if present)
+    // Format is expected to be 'hostname:port' or just 'hostname'
+    const colonIndex = host.indexOf(':');
+    return colonIndex > 0 ? host.substring(0, colonIndex) : host;
   };
 
   return containers.map((container) => {
