@@ -65,9 +65,11 @@ const fetchContainersFromHost = async (hostConfig) => {
 const transformContainers = (containers, hostConfig) => {
   // Helper to get the host address (without port) - defined once outside the loop
   const getHostAddress = () => {
-    if (!hostConfig.host) {
+    if (!hostConfig || !hostConfig.host) {
       return null;
     }
+    // For localhost, we use 'localhost' as-is for better compatibility
+    // For remote hosts, extract the IP/hostname by splitting at the colon
     return hostConfig.host.includes('localhost') 
       ? 'localhost' 
       : hostConfig.host.split(':')[0];
