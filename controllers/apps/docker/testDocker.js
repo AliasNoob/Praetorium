@@ -97,6 +97,9 @@ const transformContainers = (containers, hostConfig) => {
 
     // Helper to get the host address (without port)
     const getHostAddress = () => {
+      if (!hostConfig.host) {
+        return null;
+      }
       return hostConfig.host.includes('localhost') 
         ? 'localhost' 
         : hostConfig.host.split(':')[0];
@@ -107,18 +110,21 @@ const transformContainers = (containers, hostConfig) => {
       const port = ports.find((p) => p.PublicPort) || ports[0];
       const hostAddress = getHostAddress();
       
-      if (port.PublicPort) {
+      if (hostAddress && port.PublicPort) {
         // IP with port
         suggestedUrl = `http://${hostAddress}:${port.PublicPort}`;
-      } else {
+      } else if (hostAddress) {
         // Fallback to IP only if no public port is available
         suggestedUrl = `http://${hostAddress}`;
       }
     }
     
     // Final fallback: if no ports at all, just use the host address
-    if (!suggestedUrl && hostConfig.host) {
-      suggestedUrl = `http://${getHostAddress()}`;
+    if (!suggestedUrl) {
+      const hostAddress = getHostAddress();
+      if (hostAddress) {
+        suggestedUrl = `http://${hostAddress}`;
+      }
     }
 
     return {
