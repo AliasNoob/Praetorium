@@ -63,6 +63,27 @@ const fetchContainersFromHost = async (hostConfig) => {
  * Transform raw container data into useful format
  */
 const transformContainers = (containers, hostConfig) => {
+  // Helper to get the host address (without port) - defined once outside the loop
+  const getHostAddress = () => {
+    if (!hostConfig || !hostConfig.host) {
+      return null;
+    }
+    
+    const host = hostConfig.host;
+    
+    // Check if this is localhost (with or without port)
+    // Valid localhost formats: 'localhost', 'localhost:2375', '127.0.0.1', '127.0.0.1:2375'
+    if (host === 'localhost' || host.startsWith('localhost:') || 
+        host === '127.0.0.1' || host.startsWith('127.0.0.1:')) {
+      return 'localhost';
+    }
+    
+    // For remote hosts, extract the IP/hostname before the port (if present)
+    // Format is expected to be 'hostname:port' or just 'hostname'
+    const colonIndex = host.indexOf(':');
+    return colonIndex > 0 ? host.substring(0, colonIndex) : host;
+  };
+
   return containers.map((container) => {
     const labels = container.Labels || {};
     const names = container.Names?.map((n) => n.replace(/^\//, '')) || [];
@@ -95,15 +116,24 @@ const transformContainers = (containers, hostConfig) => {
       }
     }
 
-    // Fallback: use first exposed port with host IP
-    if (!suggestedUrl && ports.length > 0) {
-      const port = ports.find((p) => p.PublicPort) || ports[0];
-      if (port.PublicPort) {
-        // Use the host's IP/hostname for remote, localhost for local
-        const hostAddress = hostConfig.host.includes('localhost') 
-          ? 'localhost' 
-          : hostConfig.host.split(':')[0];
-        suggestedUrl = `http://${hostAddress}:${port.PublicPort}`;
+    // Fallback: use exposed ports with host IP
+    if (!suggestedUrl) {
+      const hostAddress = getHostAddress();
+      
+      if (hostAddress) {
+        // Try to find a public port first
+        let publicPort = null;
+        if (ports.length > 0) {
+          const portWithPublic = ports.find((p) => p.PublicPort);
+          if (portWithPublic) {
+            publicPort = portWithPublic.PublicPort;
+          }
+        }
+        
+        // Construct URL once with or without port
+        suggestedUrl = publicPort 
+          ? `http://${hostAddress}:${publicPort}`
+          : `http://${hostAddress}`;
       }
     }
 
