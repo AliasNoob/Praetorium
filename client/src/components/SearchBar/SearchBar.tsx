@@ -1,4 +1,4 @@
-import { KeyboardEvent, useCallback, useEffect, useMemo, useRef } from 'react';
+import { KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -20,6 +20,7 @@ interface Props {
 
 export const SearchBar = (props: Props): JSX.Element => {
   const { config, loading } = useSelector((state: State) => state.config);
+  const [isShiftHeld, setIsShiftHeld] = useState(false);
 
   const dispatch = useDispatch();
   const { createNotification } = useMemo(
@@ -42,6 +43,28 @@ export const SearchBar = (props: Props): JSX.Element => {
       inputRef.current.focus();
     }
   }, [config.disableAutofocus, loading]);
+
+  // Track shift key state globally
+  useEffect(() => {
+    const handleKeyDown = (e: globalThis.KeyboardEvent) => {
+      if (e.key === 'Shift') {
+        setIsShiftHeld(true);
+      }
+    };
+    const handleKeyUp = (e: globalThis.KeyboardEvent) => {
+      if (e.key === 'Shift') {
+        setIsShiftHeld(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
 
   // Listen for keyboard events outside of search bar
   useEffect(() => {
@@ -79,6 +102,14 @@ export const SearchBar = (props: Props): JSX.Element => {
     }
 
     if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+      // Check if shift is held for shift search provider
+      if (e.shiftKey && config.shiftSearchTemplate && !/^ *$/.test(rawQuery)) {
+        const shiftEncodedURL = encodeURIComponent(inputRef.current.value.trim());
+        const url = `${config.shiftSearchTemplate}${shiftEncodedURL}`;
+        redirectUrl(url, false); // Always open in new tab for shift search
+        return;
+      }
+
       if (!primarySearch.prefix) {
         // Prefix not found -> emit notification
         createNotification({
@@ -118,6 +149,9 @@ export const SearchBar = (props: Props): JSX.Element => {
     }
   };
 
+  // Get shift provider name for display
+  const shiftProviderName = config.shiftSearchProvider || 'ChatGPT';
+
   return (
     <div className={classes.SearchContainer}>
       <input
@@ -127,6 +161,12 @@ export const SearchBar = (props: Props): JSX.Element => {
         onKeyUp={(e) => searchHandler(e)}
         onDoubleClick={clearSearch}
       />
+      {isShiftHeld && inputRef.current?.value && (
+        <div className={classes.ShiftBubble}>
+          <span className={classes.ShiftBubbleIcon}>⚡</span>
+          <span>{shiftProviderName}</span>
+        </div>
+      )}
     </div>
   );
 };

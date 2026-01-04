@@ -8,6 +8,38 @@ import { weatherTemplate } from '../../../utility/templateObjects/weatherTemplat
 import { WeatherIcon } from '../../UI';
 import classes from './WeatherWidget.module.css';
 
+// Map Open-Meteo weather codes to WeatherAPI codes for icon display
+const openMeteoToWeatherApi: Record<number, number> = {
+  0: 1000, // Clear sky
+  1: 1003, // Mainly clear
+  2: 1003, // Partly cloudy
+  3: 1006, // Overcast
+  45: 1135, // Fog
+  48: 1147, // Depositing rime fog
+  51: 1150, // Light drizzle
+  53: 1153, // Moderate drizzle
+  55: 1153, // Dense drizzle
+  56: 1168, // Freezing drizzle
+  57: 1171, // Freezing drizzle heavy
+  61: 1183, // Slight rain
+  63: 1186, // Moderate rain
+  65: 1195, // Heavy rain
+  66: 1204, // Freezing rain
+  67: 1207, // Heavy freezing rain
+  71: 1210, // Slight snow fall
+  73: 1213, // Moderate snow fall
+  75: 1219, // Heavy snow fall
+  77: 1114, // Snow grains
+  80: 1180, // Rain showers
+  81: 1189, // Rain showers moderate
+  82: 1195, // Violent rain showers
+  85: 1210, // Snow showers slight
+  86: 1219, // Snow showers heavy
+  95: 1087, // Thunderstorm
+  96: 1273, // Thunderstorm with hail
+  99: 1276, // Thunderstorm with heavy hail
+};
+
 // Redux
 // Typescript
 // CSS
@@ -139,13 +171,14 @@ export const WeatherWidget = (): JSX.Element => {
         }
 
         if (current) {
+          const rawWeatherCode = current.weather_code ?? 0;
           setOpenMeteoCurrent({
             tempC: current.temperature_2m ?? 0,
             apparentTempC: current.apparent_temperature ?? current.temperature_2m ?? 0,
             windK: current.wind_speed_10m ?? 0,
             humidity: current.relative_humidity_2m ?? 0,
             cloud: current.cloud_cover ?? 0,
-            weatherCode: current.weather_code ?? 1000,
+            weatherCode: openMeteoToWeatherApi[rawWeatherCode] ?? 1000,
             isDay: current.is_day ? 1 : 0,
             precipitationProbability: daily?.precipitation_probability_max?.[0] ?? 0,
             nextPrecip,
@@ -369,7 +402,7 @@ export const WeatherWidget = (): JSX.Element => {
 
   const hasCurrent =
     provider === 'open-meteo'
-      ? !!openMeteoCurrent || weather.id > 0
+      ? !!openMeteoCurrent
       : weather.id > 0;
   const canShowWeather =
     !configLoading &&

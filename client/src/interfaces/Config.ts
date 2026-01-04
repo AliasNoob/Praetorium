@@ -24,6 +24,8 @@ export interface Config {
   hideSearch: boolean;
   defaultSearchProvider: string;
   secondarySearchProvider: string;
+  shiftSearchProvider: string;
+  shiftSearchTemplate: string;
   dockerApps: boolean;
   dockerHost: string;
   kubernetesApps: boolean;

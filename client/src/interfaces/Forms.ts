@@ -15,6 +15,8 @@ export interface WeatherForm {
 export interface GeneralForm {
   defaultSearchProvider: string;
   secondarySearchProvider: string;
+  shiftSearchProvider: string;
+  shiftSearchTemplate: string;
   searchSameTab: boolean;
   pinAppsByDefault: boolean;
   pinBookmarksByDefault: boolean;

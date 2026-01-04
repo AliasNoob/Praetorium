@@ -28,7 +28,7 @@ export const AppDetails = (): JSX.Element => {
             <SettingsHeadline text="App version" />
             <p className={classes.text}>
               <a
-                href="https://github.com/pawelmalak/praetorium"
+                href="https://github.com/AliasNoob/Praetorium"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -40,7 +40,7 @@ export const AppDetails = (): JSX.Element => {
             <p className={classes.text}>
               See changelog{' '}
               <a
-                href="https://github.com/pawelmalak/praetorium/blob/master/CHANGELOG.md"
+                href="https://github.com/AliasNoob/Praetorium/blob/master/CHANGELOG.md"
                 target="_blank"
                 rel="noreferrer"
               >

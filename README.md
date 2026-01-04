@@ -41,7 +41,7 @@ The easiest way to run Praetorium:
 ```sh
 # Set your password and start (pulls from GitHub Container Registry)
 export PRAETORIUM_PASSWORD="your-secure-password"
-curl -O https://raw.githubusercontent.com/adavenport/praetorium/master/.docker/docker-compose.prod.yml
+curl -O https://raw.githubusercontent.com/AliasNoob/Praetorium/master/.docker/docker-compose.prod.yml
 docker compose -f docker-compose.prod.yml up -d
 ```
 
@@ -108,7 +108,7 @@ If you prefer to build from source (for development or customization):
 
 ```sh
 # Clone the repo
-git clone https://github.com/adavenport/praetorium.git
+git clone https://github.com/AliasNoob/Praetorium.git
 cd praetorium
 
 # Build and run

@@ -56,7 +56,7 @@ ENV VERSION=${VERSION}
 
 LABEL org.opencontainers.image.title="Praetorium"
 LABEL org.opencontainers.image.description="Self-hosted start page for your homelab"
-LABEL org.opencontainers.image.source="https://github.com/adavenport/praetorium"
+LABEL org.opencontainers.image.source="https://github.com/AliasNoob/Praetorium"
 LABEL org.opencontainers.image.version="${VERSION}"
 
 WORKDIR /app

@@ -41,6 +41,8 @@ export const generalSettingsTemplate: GeneralForm = {
   searchSameTab: false,
   defaultSearchProvider: 'l',
   secondarySearchProvider: 'd',
+  shiftSearchProvider: 'ChatGPT',
+  shiftSearchTemplate: 'https://chatgpt.com/?prompt=',
   pinAppsByDefault: true,
   pinBookmarksByDefault: true,
   pinCategoriesByDefault: true,

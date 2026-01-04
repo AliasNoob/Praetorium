@@ -221,6 +221,38 @@ export const GeneralSettings = (): JSX.Element => {
           </select>
         </InputGroup>
 
+        {/* SHIFT SEARCH PROVIDER */}
+        <SettingsHeadline text="Shift+Enter Search" />
+        <InputGroup>
+          <label htmlFor="shiftSearchProvider">Provider name</label>
+          <input
+            type="text"
+            id="shiftSearchProvider"
+            name="shiftSearchProvider"
+            placeholder="ChatGPT"
+            value={formData.shiftSearchProvider}
+            onChange={(e) => inputChangeHandler(e)}
+          />
+          <span>
+            Name displayed in the bubble when holding Shift
+          </span>
+        </InputGroup>
+
+        <InputGroup>
+          <label htmlFor="shiftSearchTemplate">Search URL template</label>
+          <input
+            type="text"
+            id="shiftSearchTemplate"
+            name="shiftSearchTemplate"
+            placeholder="https://chatgpt.com/?prompt="
+            value={formData.shiftSearchTemplate}
+            onChange={(e) => inputChangeHandler(e)}
+          />
+          <span>
+            URL prefix for Shift+Enter search. Your query will be appended to this URL.
+          </span>
+        </InputGroup>
+
         <Button>Save changes</Button>
       </form>
 

@@ -23,7 +23,7 @@ services:
   praetorium:
     # Pull from GitHub Container Registry
     # Change the tag to upgrade: latest, v2.4.0, 2.4, etc.
-    image: ghcr.io/adavenport/praetorium:${PRAETORIUM_TAG:-latest}
+    image: ghcr.io/aliasnoob/praetorium:${PRAETORIUM_TAG:-latest}
     container_name: praetorium
 
     # --- Volumes ---

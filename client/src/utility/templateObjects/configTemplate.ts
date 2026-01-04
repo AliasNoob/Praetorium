@@ -24,6 +24,8 @@ export const configTemplate: Config = {
   hideSearch: false,
   defaultSearchProvider: 'l',
   secondarySearchProvider: 'd',
+  shiftSearchProvider: 'ChatGPT',
+  shiftSearchTemplate: 'https://chatgpt.com/?prompt=',
   dockerApps: false,
   dockerHost: 'localhost',
   kubernetesApps: false,
