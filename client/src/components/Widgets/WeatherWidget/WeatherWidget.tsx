@@ -289,14 +289,14 @@ export const WeatherWidget = (): JSX.Element => {
       {/* FORECAST ROW - shown when precipitation is selected and we have forecast */}
       {provider === 'open-meteo' && config.weatherData === 'precipitation' && forecast.length > 0 && (
         <div className={classes.Design1ForecastRow}>
-          {forecast.slice(0, 4).map((day) => {
+          {forecast.slice(0, 5).map((day) => {
             const date = new Date(day.date);
             const label = date.toLocaleDateString(undefined, { weekday: 'short' });
             return (
               <div className={classes.Design1ForecastItem} key={day.date}>
                 <span className={classes.Design1ForecastDay}>{label}</span>
                 <span className={classes.Design1ForecastTemp}>
-                  {formatTemp(day.tempMaxC)}
+                  {formatTemp(day.tempMinC)} / {formatTemp(day.tempMaxC)}
                 </span>
               </div>
             );

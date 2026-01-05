@@ -44,12 +44,23 @@ body {
   --color-background: #242b33;
   --color-primary: #effbff;
   --color-accent: #6ee2ff;
+  --color-muted: #6e7b95;
   --spacing-ui: 10px;
+
+  /* Layout variables */
+  --pad-left: 32px;
+  --pad-right: 24px;
+  --pad-top: 18px;
 
   background-color: var(--color-background);
   transition: background-color 0.3s;
   font-family: Roboto, sans-serif;
   font-size: 14px;
+  min-height: 100vh;
+}
+
+html {
+  height: 100%;
 }
 
 a {

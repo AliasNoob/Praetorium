@@ -1,21 +1,40 @@
 .SettingsButton {
-  width: 35px;
-  height: 35px;
-  background-color: var(--color-accent);
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   position: fixed;
-  bottom: var(--spacing-ui);
-  left: var(--spacing-ui);
+  bottom: 16px;
+  left: 16px;
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: 0.25;
-  transition: all 0.3s;
+  cursor: pointer;
+  z-index: 1000;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  transition: background 0.2s ease;
   visibility: hidden;
 }
 
 .SettingsButton:hover {
-  cursor: pointer;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.SettingsButton::after {
+  content: "";
+  position: absolute;
+  left: 44px;
+  font-size: 11px;
+  color: var(--color-muted, #6e7b95);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.SettingsButton:hover::after {
+  content: "Settings";
   opacity: 1;
 }
 
@@ -27,4 +46,78 @@
 
 .HomeSpace {
   height: 20px;
+}
+
+/* Top accent rule */
+.TopRule {
+  height: 2px;
+  background: var(--color-accent, #58d0ff);
+  opacity: 0.85;
+  margin-bottom: 16px;
+}
+
+/* Main two-column layout with right rail for future widgets */
+.MainLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 420px;
+  gap: 32px;
+}
+
+@media (max-width: 1100px) {
+  .MainLayout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Right rail (reserved space for future widgets like calendar) */
+.RightRail {
+  position: relative;
+}
+
+.RightRail::before {
+  content: "";
+  position: absolute;
+  left: -16px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(88, 208, 255, 0.35),
+    transparent
+  );
+}
+
+.RailCard {
+  padding: 16px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.15));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.RailTitle {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted, #6e7b95);
+  margin-bottom: 10px;
+}
+
+.CalendarPlaceholder {
+  height: 420px;
+  border-radius: 10px;
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+}
+
+@media (max-width: 1100px) {
+  .RightRail {
+    display: none;
+  }
 }

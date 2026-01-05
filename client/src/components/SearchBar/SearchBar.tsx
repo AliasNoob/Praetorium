@@ -157,13 +157,13 @@ export const SearchBar = (props: Props): JSX.Element => {
       <input
         ref={inputRef}
         type="text"
-        className={classes.SearchBar}
+        className={`${classes.SearchBar} ${isShiftHeld ? classes.SearchBarShift : ''}`}
         onKeyUp={(e) => searchHandler(e)}
         onDoubleClick={clearSearch}
       />
-      {isShiftHeld && inputRef.current?.value && (
-        <div className={classes.ShiftBubble}>
-          <span className={classes.ShiftBubbleIcon}>⚡</span>
+      {isShiftHeld && (
+        <div className={classes.ShiftIndicator}>
+          <span className={classes.ShiftIndicatorIcon}>⚡</span>
           <span>{shiftProviderName}</span>
         </div>
       )}

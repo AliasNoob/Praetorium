@@ -1,3 +1,15 @@
+### v2.8.0 (2026-01-05)
+- Added Watchtower auto-update support to production Docker Compose
+- New modern card-based UI design with glass morphism effects
+- Redesigned settings page with improved card-based input groups
+- Enhanced search bar with shift-key indicator for secondary search
+- New right rail layout (reserved for future widgets)
+- Improved weather widget with compact right-aligned design
+- Updated grid layouts for apps and bookmarks (4-column max)
+- Improved header styling with tighter typography
+- Added "Modern cards" category style option (replaces "Light bubble")
+- Various CSS refinements for a more polished dark theme
+
 ### v2.6.0 (2024-12-20)
 - Enhanced Docker service URL auto-population with comprehensive fallback logic
 - Added IP:Port auto-population from Docker container public ports

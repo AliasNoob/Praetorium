@@ -56,6 +56,27 @@ services:
       start_period: 10s
 
     restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  # --- Watchtower Auto-Updater ---
+  # Automatically pulls new images and recreates containers
+  # Remove this service if you prefer manual updates
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      # Remove old images after updating
+      - WATCHTOWER_CLEANUP=true
+      # Check for updates every 24 hours (86400 seconds)
+      - WATCHTOWER_POLL_INTERVAL=${WATCHTOWER_INTERVAL:-86400}
+      # Only update containers with the enable label
+      - WATCHTOWER_LABEL_ENABLE=true
+      # Optional: Send notifications (configure as needed)
+      # - WATCHTOWER_NOTIFICATIONS=email
+    restart: unless-stopped
 
 # --- Named Volumes ---
 # The praetorium_data volume stores:

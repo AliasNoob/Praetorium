@@ -11,6 +11,12 @@
   --card-radius: 12px;
   --shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.28);
   --shadow-faint: 0 6px 16px rgba(0, 0, 0, 0.18);
+
+  /* Layout variables */
+  --pad-left: 60px;
+  --pad-right: 24px;
+  --pad-top: 18px;
+  --line: #2f3a45;
 }
 
 /* --- Global surface & typography --- */
@@ -24,19 +30,106 @@ body {
 h1, h2, h3, h4 { letter-spacing: -0.01em; color: var(--color-primary); }
 .time { color: var(--color-muted) !important; }
 
-/* --- Container & header --- */
-[class*="Container"] {
-  padding: 28px 20px;
-  max-width: 1400px;
-  margin: 0 auto;
+/* --- Top accent rule --- */
+.TopRule {
+  height: 2px;
+  background: var(--color-accent);
+  opacity: 0.85;
+  margin-bottom: 16px;
 }
+
+/* --- Container & layout (left-anchored, full-width) --- */
+[class*="Container"] {
+  padding: 18px 24px 60px 60px !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  /* No max-width, no centering - left-anchored layout */
+}
+
+/* --- Main two-column layout with right rail --- */
+.MainLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 420px;
+  gap: 32px;
+}
+
+@media (max-width: 1100px) {
+  .MainLayout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- Right rail (future widget area) --- */
+.RightRail {
+  position: relative;
+}
+
+.RightRail::before {
+  content: "";
+  position: absolute;
+  left: -16px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(88, 208, 255, 0.35),
+    transparent
+  );
+}
+
+.RailCard {
+  padding: 16px;
+  border-radius: var(--card-radius);
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.15));
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+.RailTitle {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: 10px;
+}
+
+.CalendarPlaceholder {
+  height: 420px;
+  border-radius: 10px;
+  border: 1px dashed rgba(255,255,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.5);
+}
+
+/* --- Date display above greeting --- */
+.DateDisplay {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: 10px;
+}
+
+/* --- Header --- */
 [class*="HeaderMain"] {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 28px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+  gap: 24px;
 }
-[class*="Header"] h1 { font-size: 3rem; font-weight: 700; }
+[class*="Header"] h1 {
+  font-size: 44px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0;
+}
 [class*="Header"] p { color: var(--color-muted); text-transform: uppercase; }
 
 /* --- Grids --- */
@@ -91,16 +184,18 @@ h1, h2, h3, h4 { letter-spacing: -0.01em; color: var(--color-primary); }
   border-radius: 10px;
   color: var(--color-primary);
   text-decoration: none;
-  transition: background 0.16s ease, transform 0.16s ease, color 0.16s ease;
+  transition: background 120ms ease, transform 120ms ease, color 120ms ease;
 }
 [class*="Apps"] a:hover,
 [class*="Bookmarks"] a:hover {
-  background: var(--color-panel-strong);
+  background: rgba(88, 208, 255, 0.08);
   color: #fff;
-  transform: translateY(-1px);
+  transform: translateX(2px);
 }
 [class*="Apps"] a:active,
-[class*="Bookmarks"] a:active { transform: translateY(0); }
+[class*="Bookmarks"] a:active {
+  transform: translateX(1px) scale(0.99);
+}
 
 /* Icons */
 [class*="AppIcon"],
@@ -135,6 +230,105 @@ h1, h2, h3, h4 { letter-spacing: -0.01em; color: var(--color-primary); }
 }
 [class*="SectionHeadline"] a:hover { text-decoration: underline; }
 
+/* ========================================
+   SETTINGS PAGE - Modern Card-Based Groups
+   ======================================== */
+
+/* Settings Headline - Category Title */
+[class*="SettingsHeadline"] {
+  font-size: 10px !important;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent) !important;
+  font-weight: 600;
+  margin: 0 0 12px 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  display: block;
+}
+
+/* Card wrapper for settings groups - created via adjacent sibling styling */
+/* InputGroup rows inside settings */
+[class*="InputGroup"] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  margin-bottom: 8px !important;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(0,0,0,0.12));
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: background 120ms ease, transform 120ms ease;
+}
+
+[class*="InputGroup"]:hover {
+  background: rgba(88, 208, 255, 0.06);
+  transform: translateX(2px);
+}
+
+/* InputGroup label - primary text */
+[class*="InputGroup"] label {
+  font-size: 14px !important;
+  font-weight: 500;
+  color: var(--color-primary) !important;
+  flex: 1;
+  display: block !important;
+  margin: 0;
+}
+
+/* InputGroup hint text - secondary/muted */
+[class*="InputGroup"] span {
+  font-size: 11px !important;
+  color: var(--color-muted) !important;
+  opacity: 0.75;
+  margin-top: 2px;
+}
+
+/* InputGroup inputs and selects */
+[class*="InputGroup"] input,
+[class*="InputGroup"] select,
+[class*="InputGroup"] textarea {
+  margin: 0 !important;
+  width: auto !important;
+  min-width: 180px;
+  max-width: 280px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: var(--color-panel-strong, rgba(255,255,255,0.08)) !important;
+  color: var(--color-primary) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  font-size: 13px;
+}
+
+[class*="InputGroup"] input:focus,
+[class*="InputGroup"] select:focus,
+[class*="InputGroup"] textarea:focus {
+  outline: none;
+  border-color: var(--color-accent) !important;
+  box-shadow: 0 0 0 2px rgba(88, 208, 255, 0.15);
+}
+
+[class*="InputGroup"] textarea {
+  min-width: 280px;
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Color inputs */
+[class*="InputGroup"] input[type="color"] {
+  width: 40px !important;
+  min-width: 40px !important;
+  height: 32px;
+  padding: 2px !important;
+  cursor: pointer;
+}
+
+/* Settings form structure */
+form [class*="SettingsHeadline"]:not(:first-of-type) {
+  margin-top: 24px !important;
+}
+
 /* Buttons */
 button,
 .btn {
@@ -154,6 +348,18 @@ button:active,
 
 /* Responsive tweaks */
 @media (max-width: 768px) {
-  [class*="Container"] { padding: 16px; }
+  [class*="Container"] { padding: 16px 16px 60px 16px !important; }
+  
+  [class*="InputGroup"] {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  [class*="InputGroup"] input,
+  [class*="InputGroup"] select,
+  [class*="InputGroup"] textarea {
+    width: 100% !important;
+    max-width: none;
+  }
   [class*="Header"] h1 { font-size: 2.2rem; }
 }

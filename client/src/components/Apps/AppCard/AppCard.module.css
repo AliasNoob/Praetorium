@@ -2,6 +2,52 @@
   margin-bottom: 20px;
 }
 
+/* Modern Card Surface - when "Light bubble" is selected */
+.CardSurface {
+  padding: 16px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.15));
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+.CardSurface .CategoryTitle {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+}
+
+.CardSurface .Apps a {
+  padding: 8px 10px;
+  border-radius: 8px;
+  transition: background 120ms ease, transform 120ms ease;
+}
+
+.CardSurface .Apps a:hover {
+  background: rgba(88, 208, 255, 0.08);
+  transform: translateX(2px);
+}
+
+.CardSurface .Apps a:active {
+  transform: translateX(1px) scale(0.99);
+}
+
+.CardSurface .AppIcon {
+  width: 35px;
+  height: 35px;
+  margin-right: 0.5em;
+}
+
+.CardSurface .AppCardDetails h5 {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.CardSurface .AppCardDetails span {
+  font-size: 11px;
+  opacity: 0.75;
+}
+
 .CategoryTitle {
   color: var(--color-accent);
   margin-bottom: 12px;
@@ -45,10 +91,10 @@
 }
 
 .CategoryBubble {
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: linear-gradient(120deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
 }
 
 .CategoryBubbleWide {

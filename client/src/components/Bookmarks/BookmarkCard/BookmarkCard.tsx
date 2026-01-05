@@ -71,8 +71,10 @@ export const BookmarkCard = (props: Props): JSX.Element => {
     .filter(Boolean)
     .join(' ');
 
+  const isCardStyle = config.categoryHeaderStyle === 'bubble';
+
   return (
-    <div className={classes.BookmarkCard}>
+    <div className={[classes.BookmarkCard, isCardStyle ? classes.CardSurface : ''].filter(Boolean).join(' ')}>
       <h3
         className={headerClasses}
         style={headerStyle}

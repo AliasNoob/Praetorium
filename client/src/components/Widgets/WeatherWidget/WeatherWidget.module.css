@@ -1,9 +1,12 @@
 .WeatherWidget {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   visibility: hidden;
-  color: var(--color-primary);
+  color: var(--color-muted, #6e7b95);
+  text-align: right;
+  font-size: 12px;
+  white-space: nowrap;
 }
 
 .WeatherWidgetClickable {
@@ -13,26 +16,27 @@
 .WeatherIcon {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .WeatherDetails {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  font-size: 16px;
-  color: var(--color-primary);
+  font-size: 12px;
+  color: var(--color-muted, #6e7b95);
   margin-left: 10px;
-  font-weight: 500;
+  font-weight: 400;
+  text-align: right;
 }
 
 .WeatherDetails span:first-child {
-  border-bottom: 1px solid var(--color-primary);
-  padding-bottom: 5px;
+  border-bottom: none;
+  padding-bottom: 2px;
 }
 
 .WeatherDetails span:last-child {
-  padding-top: 5px;
+  padding-top: 2px;
 }
 
 .Design2 {
@@ -66,8 +70,8 @@
 }
 
 .ForecastRow {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  display: flex;
+  justify-content: flex-end;
   gap: 8px;
   font-size: 12px;
   color: var(--color-text, var(--color-primary));
@@ -80,6 +84,7 @@
   background: rgba(255, 255, 255, 0.02);
   border-radius: 6px;
   padding: 6px;
+  text-align: center;
 }
 
 .DayLabel {
@@ -101,13 +106,15 @@
   padding-top: 8px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   font-size: 11px;
+  justify-content: flex-end;
 }
 
 .Design1ForecastItem {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   gap: 2px;
+  text-align: right;
 }
 
 .Design1ForecastDay {

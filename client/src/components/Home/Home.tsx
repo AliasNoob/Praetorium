@@ -95,9 +95,12 @@ export const Home = (): JSX.Element => {
         <div></div>
       )}
 
-      <Header />
+      <div className={classes.MainLayout}>
+        {/* Main content section */}
+        <section>
+          <Header />
 
-      {!isAuthenticated &&
+          {!isAuthenticated &&
       !appCategories.some((a) => a.isPinned) &&
       !bookmarkCategories.some((c) => c.isPinned) ? (
         <Message>
@@ -152,6 +155,18 @@ export const Home = (): JSX.Element => {
       ) : (
         <></>
       )}
+        </section>
+
+        {/* Right rail - reserved space for future widgets (e.g., calendar) */}
+        <aside className={classes.RightRail}>
+          <div className={classes.RailCard}>
+            <div className={classes.RailTitle}>Calendar</div>
+            <div className={classes.CalendarPlaceholder}>
+              Calendar widget placeholder
+            </div>
+          </div>
+        </aside>
+      </div>
 
       <Link to="/settings" className={classes.SettingsButton}>
         <Icon icon="mdiCog" color="var(--color-background)" />

@@ -6,6 +6,6 @@ export const redirectUrl = (url: string, sameTab: boolean) => {
   if (sameTab) {
     document.location.assign(parsedUrl);
   } else {
-    window.open(parsedUrl);
+    window.open(parsedUrl, '_blank');
   }
 };

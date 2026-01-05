@@ -69,8 +69,10 @@ export const AppCard = (props: Props): JSX.Element => {
     ? { color: config.categoryDescriptionColor }
     : undefined;
 
+  const isCardStyle = config.categoryHeaderStyle === 'bubble';
+
   return (
-    <div className={classes.AppCard}>
+    <div className={[classes.AppCard, isCardStyle ? classes.CardSurface : ''].filter(Boolean).join(' ')}>
       <h3
         className={headerClasses}
         style={headerStyle}

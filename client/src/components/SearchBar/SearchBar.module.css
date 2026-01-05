@@ -22,6 +22,49 @@
   outline: none;
 }
 
+/* Shift key held - change to secondary color */
+.SearchBarShift {
+  border-bottom-color: var(--color-secondary, #9fb3d9);
+  opacity: 1;
+}
+
+/* Shift search indicator - positioned below the search line */
+.ShiftIndicator {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  margin-top: -20px; /* Align with bottom of search bar (accounting for margin-bottom) */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--color-secondary, #9fb3d9);
+  color: var(--color-background);
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: slideDown 0.15s ease-out;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.ShiftIndicatorIcon {
+  font-size: 14px;
+}
+
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Legacy styles - kept for compatibility */
 .ShiftBubble {
   position: absolute;
   left: 0;

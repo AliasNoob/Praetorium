@@ -353,8 +353,8 @@ export const UISettings = (): JSX.Element => {
               onChange={(e) => inputChangeHandler(e)}
             />
             <div>
-              <div className={styles.RadioLabel}>Light bubble</div>
-              <div className={styles.RadioHint}>Pill background</div>
+              <div className={styles.RadioLabel}>Modern cards</div>
+              <div className={styles.RadioHint}>Card surfaces with depth</div>
             </div>
           </label>
         </div>

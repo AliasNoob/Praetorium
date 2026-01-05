@@ -1,15 +1,16 @@
-.Container {
-  width: 100%;
-  padding: 20px;
-  margin: 0 auto;
+/* Layout Variables */
+:root {
+  --pad-left: 60px;
+  --pad-right: 24px;
+  --pad-top: 18px;
 }
 
-/* .Container {
-  width: 60%;
-  margin: 0 auto;
-  padding: 20px;
-  padding-top: 20px;
-} */
+.Container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 18px 24px 60px 60px;
+  /* Left-anchored layout - no centering */
+}
 
 /* 320px — 480px: Mobile devices.
 481px — 768px: iPads, Tablets.
@@ -17,15 +18,20 @@
 1025px — 1200px: Desktops, large screens.
 1201px and more — Extra large screens, TV. */
 
+@media (max-width: 768px) {
+  .Container {
+    padding: 16px 16px 60px 16px;
+  }
+}
+
 @media (min-width: 769px) {
   .Container {
-    /* padding: 25px 40px; */
-    width: 90%;
+    padding: 18px 24px 60px 60px;
   }
 }
 
 @media (min-width: 1201px) {
   .Container {
-    padding: 50px 250px;
+    padding: 18px 24px 60px 60px;
   }
 }
