@@ -102,11 +102,14 @@ export const SearchBar = (props: Props): JSX.Element => {
     }
 
     if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+      // Clear shift state immediately on Enter
+      setIsShiftHeld(false);
+      
       // Check if shift is held for shift search provider
       if (e.shiftKey && config.shiftSearchTemplate && !/^ *$/.test(rawQuery)) {
         const shiftEncodedURL = encodeURIComponent(inputRef.current.value.trim());
         const url = `${config.shiftSearchTemplate}${shiftEncodedURL}`;
-        redirectUrl(url, false); // Always open in new tab for shift search
+        window.open(url, '_blank');
         return;
       }
 

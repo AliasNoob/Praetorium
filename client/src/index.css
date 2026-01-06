@@ -67,3 +67,22 @@ a {
   color: var(--color-primary);
   text-decoration: none;
 }
+
+/* Global select/dropdown styling to match input fields */
+select {
+  background-color: var(--color-background, #242b33);
+  color: var(--color-primary, #effbff);
+}
+
+select option {
+  background-color: var(--color-background, #242b33);
+  color: var(--color-primary, #effbff);
+  padding: 8px 12px;
+}
+
+select option:hover,
+select option:focus,
+select option:checked {
+  background-color: var(--color-accent, #6ee2ff);
+  color: #0b111b;
+}

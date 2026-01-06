@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { App, Category } from '../../../interfaces';
 import { actionCreators } from '../../../store';
 import { State } from '../../../store/reducers';
-import { iconParser, isImage, isSvg, isUrl, urlParser } from '../../../utility';
+import { iconParser, isImage, isSvg, isUrl, urlParser, isFetchedIcon, parseFetchedIcon } from '../../../utility';
 import { Icon } from '../../UI';
 import classes from './AppCard.module.css';
 
@@ -108,7 +108,21 @@ export const AppCard = (props: Props): JSX.Element => {
           if (app.icon) {
             const { icon, name } = app;
 
-            if (isImage(icon)) {
+            // Check for fetched icon (JSON format)
+            if (isFetchedIcon(icon)) {
+              const fetchedIcon = parseFetchedIcon(icon);
+              if (fetchedIcon) {
+                iconEl = (
+                  <div className={classes.AppIcon}>
+                    <img
+                      src={fetchedIcon.path}
+                      alt={`${name} icon`}
+                      className={classes.CustomIcon}
+                    />
+                  </div>
+                );
+              }
+            } else if (isImage(icon)) {
               const source = isUrl(icon) ? icon : `/uploads/${icon}`;
 
               iconEl = (

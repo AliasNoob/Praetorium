@@ -60,6 +60,18 @@
   box-shadow: 0 0 0 2px rgba(88, 208, 255, 0.15);
 }
 
+.InputGroup select option {
+  background-color: var(--color-panel-strong, #1a1f2e);
+  color: var(--color-primary);
+  padding: 8px 12px;
+}
+
+.InputGroup select option:hover,
+.InputGroup select option:checked {
+  background-color: var(--color-accent, #58d0ff);
+  color: #0b111b;
+}
+
 .InputGroup textarea {
   min-width: 280px;
   min-height: 80px;

@@ -1,13 +1,13 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import axios from 'axios';
 
 import { App, Category, NewApp, DockerService } from '../../../interfaces';
 import { actionCreators } from '../../../store';
 import { State } from '../../../store/reducers';
-import { inputHandler, newAppTemplate } from '../../../utility';
+import { inputHandler, newAppTemplate, applyAuth } from '../../../utility';
 import { Button, InputGroup, ModalForm } from '../../UI';
-import classes from './Form.module.css';
 
 // Redux
 // Typescript
@@ -20,6 +20,13 @@ interface Props {
 }
 
 type AppSource = 'manual' | 'docker';
+type IconSource = 'mdi' | 'upload' | 'autofetch';
+
+interface FetchedIcons {
+  white: string | null;
+  black: string | null;
+  original: string | null;
+}
 
 export const AppsForm = ({
   app,
@@ -34,8 +41,15 @@ export const AppsForm = ({
 
   const [appSource, setAppSource] = useState<AppSource>('manual');
   const [selectedDockerService, setSelectedDockerService] = useState<string>('');
-  const [useCustomIcon, toggleUseCustomIcon] = useState<boolean>(false);
   const [customIcon, setCustomIcon] = useState<File | null>(null);
+
+  // Auto-fetch favicon state
+  const [iconSource, setIconSource] = useState<IconSource>('mdi');
+  const [fetchedIcons, setFetchedIcons] = useState<FetchedIcons | null>(null);
+  const [selectedVariant, setSelectedVariant] = useState<'white' | 'black' | 'original'>('white');
+  const [isFetching, setIsFetching] = useState<boolean>(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+  const [iconFetchUrl, setIconFetchUrl] = useState<string>('');
 
   const [formData, setFormData] = useState<NewApp>(newAppTemplate);
 
@@ -84,6 +98,88 @@ export const AppsForm = ({
   const fileChangeHandler = (e: ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files) {
       setCustomIcon(e.target.files[0]);
+    }
+  };
+
+  // Fetch favicon from URL
+  const fetchFaviconFromUrl = async (): Promise<void> => {
+    if (!iconFetchUrl) {
+      createNotification({
+        title: 'Error',
+        message: 'Please enter a URL for icon fetching',
+      });
+      return;
+    }
+
+    setIsFetching(true);
+    setFetchError(null);
+    setFetchedIcons(null);
+
+    try {
+      // Ensure URL has protocol
+      let urlToFetch = iconFetchUrl;
+      if (!urlToFetch.startsWith('http://') && !urlToFetch.startsWith('https://')) {
+        urlToFetch = 'https://' + urlToFetch;
+      }
+
+      const res = await axios.post<{
+        success: boolean;
+        icons: FetchedIcons;
+        error?: string;
+      }>('/api/icons/fetch', { url: urlToFetch }, {
+        headers: applyAuth()
+      });
+
+      if (res.data.success && res.data.icons) {
+        setFetchedIcons(res.data.icons);
+        // Auto-select the first available variant
+        if (res.data.icons.white) {
+          setSelectedVariant('white');
+          setFormData(prev => ({
+            ...prev,
+            icon: JSON.stringify({ ...res.data.icons, selected: 'white' })
+          }));
+        } else if (res.data.icons.black) {
+          setSelectedVariant('black');
+          setFormData(prev => ({
+            ...prev,
+            icon: JSON.stringify({ ...res.data.icons, selected: 'black' })
+          }));
+        } else if (res.data.icons.original) {
+          setSelectedVariant('original');
+          setFormData(prev => ({
+            ...prev,
+            icon: JSON.stringify({ ...res.data.icons, selected: 'original' })
+          }));
+        }
+      } else {
+        setFetchError('Failed to fetch favicon');
+      }
+    } catch (err: any) {
+      const errorMsg = err.response?.data?.error || err.message || 'Failed to fetch favicon';
+      setFetchError(errorMsg);
+      createNotification({
+        title: 'Error',
+        message: errorMsg,
+      });
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  // Handle icon variant selection
+  const handleVariantChange = (variant: 'white' | 'black' | 'original'): void => {
+    setSelectedVariant(variant);
+    if (fetchedIcons) {
+      // Store as JSON with selected variant indicator
+      const iconData = {
+        ...fetchedIcons,
+        selected: variant
+      };
+      setFormData(prev => ({
+        ...prev,
+        icon: JSON.stringify(iconData)
+      }));
     }
   };
 
@@ -294,8 +390,27 @@ export const AppsForm = ({
       </InputGroup>
 
       {/* ICON */}
-      {!useCustomIcon ? (
-        // mdi
+      <InputGroup>
+        <label>Icon Source</label>
+        <select
+          value={iconSource}
+          onChange={(e) => {
+            const newSource = e.target.value as IconSource;
+            setIconSource(newSource);
+            if (newSource === 'mdi') {
+              setCustomIcon(null);
+              setFetchedIcons(null);
+              setFetchError(null);
+            }
+          }}
+        >
+          <option value="mdi">MDI Icon Name</option>
+          <option value="upload">Custom Upload</option>
+          <option value="autofetch">Auto-fetch from URL</option>
+        </select>
+      </InputGroup>
+
+      {iconSource === 'mdi' && (
         <InputGroup>
           <label htmlFor="icon">App icon</label>
           <input
@@ -313,17 +428,12 @@ export const AppsForm = ({
               Click here for reference
             </a>
           </span>
-          <span
-            onClick={() => toggleUseCustomIcon(!useCustomIcon)}
-            className={classes.Switch}
-          >
-            Switch to custom icon upload
-          </span>
         </InputGroup>
-      ) : (
-        // custom
+      )}
+
+      {iconSource === 'upload' && (
         <InputGroup>
-          <label htmlFor="icon">App Icon (optional)</label>
+          <label htmlFor="icon">App Icon</label>
           <input
             type="file"
             name="icon"
@@ -331,14 +441,114 @@ export const AppsForm = ({
             onChange={(e) => fileChangeHandler(e)}
             accept=".jpg,.jpeg,.png,.svg,.ico"
           />
-          <span
-            onClick={() => {
-              setCustomIcon(null);
-              toggleUseCustomIcon(!useCustomIcon);
-            }}
-            className={classes.Switch}
-          >
-            Switch to MDI
+        </InputGroup>
+      )}
+
+      {iconSource === 'autofetch' && (
+        <InputGroup>
+          <label>Auto-fetch Favicon</label>
+          <input
+            type="text"
+            placeholder="https://github.com"
+            value={iconFetchUrl}
+            onChange={(e) => setIconFetchUrl(e.target.value)}
+            style={{ marginBottom: '8px' }}
+          />
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <button
+              type="button"
+              onClick={fetchFaviconFromUrl}
+              disabled={isFetching || !iconFetchUrl}
+              style={{
+                padding: '8px 16px',
+                cursor: isFetching ? 'wait' : 'pointer',
+                opacity: isFetching ? 0.6 : 1
+              }}
+            >
+              {isFetching ? 'Fetching...' : 'Fetch Icon'}
+            </button>
+          </div>
+          
+          {fetchError && (
+            <span style={{ color: '#ff6b6b' }}>{fetchError}</span>
+          )}
+          
+          {fetchedIcons && (
+            <div style={{ marginTop: '12px' }}>
+              <div style={{ display: 'flex', gap: '16px', marginBottom: '8px' }}>
+                {fetchedIcons.white && (
+                  <div style={{ 
+                    textAlign: 'center',
+                    padding: '8px',
+                    border: selectedVariant === 'white' ? '2px solid #4dabf7' : '2px solid transparent',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    background: '#333'
+                  }}
+                  onClick={() => handleVariantChange('white')}
+                  >
+                    <img 
+                      src={`/fetched-icons/${fetchedIcons.white}?t=${Date.now()}`} 
+                      alt="White variant" 
+                      style={{ width: '48px', height: '48px', objectFit: 'contain' }}
+                      onError={(e) => {
+                        console.error('Failed to load white icon:', `/fetched-icons/${fetchedIcons.white}`);
+                      }}
+                    />
+                    <div style={{ fontSize: '12px', marginTop: '4px' }}>White</div>
+                  </div>
+                )}
+                {fetchedIcons.black && (
+                  <div style={{ 
+                    textAlign: 'center',
+                    padding: '8px',
+                    border: selectedVariant === 'black' ? '2px solid #4dabf7' : '2px solid transparent',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    background: '#f5f5f5'
+                  }}
+                  onClick={() => handleVariantChange('black')}
+                  >
+                    <img 
+                      src={`/fetched-icons/${fetchedIcons.black}?t=${Date.now()}`} 
+                      alt="Black variant" 
+                      style={{ width: '48px', height: '48px', objectFit: 'contain' }}
+                      onError={(e) => {
+                        console.error('Failed to load black icon:', `/fetched-icons/${fetchedIcons.black}`);
+                      }}
+                    />
+                    <div style={{ fontSize: '12px', marginTop: '4px', color: '#333' }}>Black</div>
+                  </div>
+                )}
+                {fetchedIcons.original && (
+                  <div style={{ 
+                    textAlign: 'center',
+                    padding: '8px',
+                    border: selectedVariant === 'original' ? '2px solid #4dabf7' : '2px solid transparent',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    background: '#666'
+                  }}
+                  onClick={() => handleVariantChange('original')}
+                  >
+                    <img 
+                      src={`/fetched-icons/${fetchedIcons.original}?t=${Date.now()}`} 
+                      alt="Original" 
+                      style={{ width: '48px', height: '48px', objectFit: 'contain' }}
+                      onError={(e) => {
+                        console.error('Failed to load original icon:', `/fetched-icons/${fetchedIcons.original}`);
+                      }}
+                    />
+                    <div style={{ fontSize: '12px', marginTop: '4px' }}>Original</div>
+                  </div>
+                )}
+              </div>
+              <span style={{ fontSize: '12px' }}>Click to select a variant</span>
+            </div>
+          )}
+          
+          <span>
+            Enter any website URL above and click "Fetch Icon" to auto-fetch its favicon
           </span>
         </InputGroup>
       )}

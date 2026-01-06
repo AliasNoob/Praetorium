@@ -23,3 +23,47 @@ export const isSvg = (data: string): boolean => {
 
   return regex.test(data);
 };
+
+// Check if icon string is a JSON fetched-icon format
+export const isFetchedIcon = (data: string): boolean => {
+  if (!data) return false;
+  try {
+    const parsed = JSON.parse(data);
+    return parsed && (parsed.white || parsed.black || parsed.original);
+  } catch {
+    return false;
+  }
+};
+
+// Parse fetched icon JSON and return the selected variant path
+export interface FetchedIconData {
+  white: string | null;
+  black: string | null;
+  original: string | null;
+  selected?: 'white' | 'black' | 'original';
+}
+
+export const parseFetchedIcon = (data: string): { path: string; isImage: boolean } | null => {
+  try {
+    const parsed: FetchedIconData = JSON.parse(data);
+    const variant = parsed.selected || 'white';
+    const path = parsed[variant];
+    
+    if (!path) {
+      // Fallback to first available
+      const fallbackPath = parsed.white || parsed.black || parsed.original;
+      if (!fallbackPath) return null;
+      return {
+        path: `/fetched-icons/${fallbackPath}`,
+        isImage: fallbackPath.endsWith('.png') || fallbackPath.endsWith('.ico')
+      };
+    }
+    
+    return {
+      path: `/fetched-icons/${path}`,
+      isImage: path.endsWith('.png') || path.endsWith('.ico')
+    };
+  } catch {
+    return null;
+  }
+};

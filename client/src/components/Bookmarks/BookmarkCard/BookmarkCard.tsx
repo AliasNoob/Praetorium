@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { Bookmark, Category } from '../../../interfaces';
 import { actionCreators } from '../../../store';
 import { State } from '../../../store/reducers';
-import { iconParser, isImage, isSvg, isUrl, urlParser } from '../../../utility';
+import { iconParser, isImage, isSvg, isUrl, urlParser, isFetchedIcon, parseFetchedIcon } from '../../../utility';
 import { Icon } from '../../UI';
 import classes from './BookmarkCard.module.css';
 
@@ -110,7 +110,21 @@ export const BookmarkCard = (props: Props): JSX.Element => {
           if (bookmark.icon) {
             const { icon, name } = bookmark;
 
-            if (isImage(icon)) {
+            // Check for fetched icon (JSON format)
+            if (isFetchedIcon(icon)) {
+              const fetchedIcon = parseFetchedIcon(icon);
+              if (fetchedIcon) {
+                iconEl = (
+                  <div className={classes.BookmarkIcon}>
+                    <img
+                      src={fetchedIcon.path}
+                      alt={`${name} icon`}
+                      className={classes.CustomIcon}
+                    />
+                  </div>
+                );
+              }
+            } else if (isImage(icon)) {
               const source = isUrl(icon) ? icon : `/uploads/${icon}`;
 
               iconEl = (

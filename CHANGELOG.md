@@ -1,4 +1,11 @@
-### v2.8.0 (2026-01-05)
+### v2.8.0 (2026-01-06)
+- Added automatic favicon fetching for apps with URL-to-SVG conversion
+- New icon processing pipeline with white/black/original color variants
+- Added icon caching system with cache management API endpoints
+- Added favicon fetching from multiple sources (HTML, root favicon, Google, DuckDuckGo)
+- Enhanced redirect URL handling with noopener/noreferrer security
+- Added popup blocker fallback for external link opening
+- Added fetched icon validation utilities for client-side icon handling
 - Added Watchtower auto-update support to production Docker Compose
 - New modern card-based UI design with glass morphism effects
 - Redesigned settings page with improved card-based input groups
@@ -9,6 +16,7 @@
 - Improved header styling with tighter typography
 - Added "Modern cards" category style option (replaces "Light bubble")
 - Various CSS refinements for a more polished dark theme
+- New dependencies: cheerio, sharp, potrace, svgo for icon processing
 
 ### v2.6.0 (2024-12-20)
 - Enhanced Docker service URL auto-population with comprehensive fallback logic

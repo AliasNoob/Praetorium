@@ -30,6 +30,25 @@ body {
 h1, h2, h3, h4 { letter-spacing: -0.01em; color: var(--color-primary); }
 .time { color: var(--color-muted) !important; }
 
+/* --- Global select/dropdown styling --- */
+select {
+  background-color: var(--color-panel-strong, #1d2635) !important;
+  color: var(--color-primary) !important;
+}
+
+select option {
+  background-color: var(--color-panel-strong, #1d2635) !important;
+  color: var(--color-primary) !important;
+  padding: 8px 12px;
+}
+
+select option:hover,
+select option:focus,
+select option:checked {
+  background-color: var(--color-accent, #58d0ff) !important;
+  color: #0b111b !important;
+}
+
 /* --- Top accent rule --- */
 .TopRule {
   height: 2px;
@@ -307,6 +326,18 @@ h1, h2, h3, h4 { letter-spacing: -0.01em; color: var(--color-primary); }
   outline: none;
   border-color: var(--color-accent) !important;
   box-shadow: 0 0 0 2px rgba(88, 208, 255, 0.15);
+}
+
+[class*="InputGroup"] select option {
+  background-color: var(--color-panel-strong, #1a1f2e) !important;
+  color: var(--color-primary) !important;
+  padding: 8px 12px;
+}
+
+[class*="InputGroup"] select option:hover,
+[class*="InputGroup"] select option:checked {
+  background-color: var(--color-accent, #58d0ff) !important;
+  color: #0b111b !important;
 }
 
 [class*="InputGroup"] textarea {
