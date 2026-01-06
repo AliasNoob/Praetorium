@@ -1,29 +1,25 @@
 # Praetorium
 
-![Homescreen screenshot](.github/home.png)
+[Screenshots to come]
 
-Praetorium is a self-hosted start page ("application hub") for your homelab/server. It’s designed to be configured from the UI: add apps + bookmarks, pin favourites, theme it, and keep everything behind optional authentication.
+A Praetorium in Roman history refers to the headquarters or residence of a high-ranking official, like a general or governor, evolving from a military commander's tent to a palace or official building, and also the headquarters of the Praetorian Guard
+
+This Praetorium project aims to be the ultimate self-hosted start page ("application hub") for your bookmarks, applications, scripts, news, weather, calanders and todo lists from online and a homelab/server. It’s designed to be highly configurable and astetic from the UI: add apps + bookmarks, pin favourites, theme it, and keep everything behind optional authentication.
 
 ## Acknowledgements / Upstream
 
-This repository is a fork of `fdarveau/praetorium`, which itself was a fork of the original project.
+This repository is a revive of a dead project called Flame `fdarveau/flame`, which itself was a fork of the original project.
 
-- Original project: `pawelmalak/praetorium` (the upstream that introduced Praetorium)
-- Intermediate fork: `fdarveau/praetorium`
-- Design inspiration: [SUI](https://github.com/jeroenpardon/sui)
+- Original project: `pawelmalak/flame` (the upstream that introduced flame)
+- Intermediate fork: `fdarveau/flame`
 
-> **Note:** The old `ghcr.io/fdarveau/praetorium` container image is no longer accessible. This fork builds locally and does not depend on any external registry.
+> **Note:** This projects builds locally and does not depend on any external registry.
 
-## What’s new in this fork
 
-This fork focuses on **App Categories** and category-aware integrations.
-
+## Features (Needs a full list)
 - **App categories (first-class)**: apps can be assigned to categories via `categoryId`, with a dedicated Categories API.
 - **Ordering + pinning for categories**: categories have `orderId`, can be pinned, and respect the instance ordering setting.
 - **Docker integration: category-aware**: Docker labels can specify `praetorium.category`; unknown categories are created automatically.
-
-## Features
-
 - Create, update, delete your applications and bookmarks from the UI
 - Pin favourites to the home screen
 - Search bar with local filtering and web providers
@@ -31,6 +27,8 @@ This fork focuses on **App Categories** and category-aware integrations.
 - Customization: themes, custom CSS
 - Weather widget
 - Integrations: Docker labels, Kubernetes ingress annotations
+- WatchTower Support for auto-upgrades
+
 
 ## Quick start
 
@@ -216,24 +214,10 @@ metadata:
 
 ## Screenshots
 
-![Apps screenshot](.github/apps.png)
 
-![Bookmarks screenshot](.github/bookmarks.png)
-
-![Settings screenshot](.github/settings.png)
-
-![Themes screenshot](.github/themes.png)
 
 ## Roadmap (ideas)
 
 These are potential future improvements (not guarantees). If you want one, open an issue and we can prioritize.
 
-- Category UX polish: faster bulk-assign and reorder flows
-- Category permissions: per-category visibility rules for guest mode
-- Import/export: backup/restore of apps/bookmarks/categories as a single bundle
-- Integrations: richer label/annotation support (descriptions, public/private, icons)
-- Observability: clearer integration health + last sync status for Docker/Kubernetes
-- Start Page Command Center: One page to rule them all Ability to launch Desktop applications / Scripts
-- Calander & Todo Integrations
-- Notes & News Integrations
-- AI Integrations 
+<https://github.com/users/AliasNoob/projects/1>
